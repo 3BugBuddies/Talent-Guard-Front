@@ -2,9 +2,7 @@
 
 # TalentGuard AI - Frontend (Web)
 
-<p align="center">
-  <img src="public\img\logo transp.png" alt="Logo TalentGuard AI" width="200"/>
-</p>
+![logo talent guard](https://github.com/user-attachments/assets/6d0ab99a-bdff-45c5-8136-b44713a563a3)
 
 <p align="center">
   <i>"TalentGuard AI: Visão preditiva. Retenção estratégica. Equidade para todos."</i>
