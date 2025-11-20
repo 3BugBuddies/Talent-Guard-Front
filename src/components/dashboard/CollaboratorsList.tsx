@@ -1,5 +1,6 @@
 import { useState } from "react";
 import EditEmployeeModal from "../modals/EditEmployeeModal";
+import AddEmployeeModal from "../modals/AddEmployeeModal";
 
 export interface RoleTO {
   id: number;
@@ -59,10 +60,13 @@ const MOCK_EMPLOYEES: EmployeeUI[] = [
   },
 ];
 
+type NewEmployee = Omit<EmployeeTO, "idEmployee">;
+
 export default function CollaboratorsList() {
   const [employees, setEmployees] = useState<EmployeeUI[]>(MOCK_EMPLOYEES);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState<EmployeeTO | null>(
     null
   );
@@ -71,6 +75,10 @@ export default function CollaboratorsList() {
     const { retentionRisk, ...employeeData } = employee;
     setSelectedEmployee(employeeData);
     setIsModalOpen(true);
+  };
+
+  const handleAddClick = () => {
+    setIsAddModalOpen(true);
   };
 
   const handleUpdateEmployee = async (updatedEmployee: EmployeeTO) => {
@@ -90,6 +98,33 @@ export default function CollaboratorsList() {
     } catch (error) {
       console.error("Erro ao atualizar:", error);
       alert("Erro ao atualizar colaborador.");
+    }
+  };
+
+  const handleCreateEmployee = async (newEmployeeData: NewEmployee) => {
+    try {
+      // const createdEmployee = await EmployeeService.create(newEmployeeData);
+
+      const newId =
+        employees.length > 0
+          ? Math.max(...employees.map((e) => e.idEmployee)) + 1
+          : 1;
+
+      const employeeWithId: EmployeeUI = {
+        ...newEmployeeData,
+        idEmployee: newId,
+        role: { ...newEmployeeData.role, id: newId + 100 }, // Mock ID do cargo
+        retentionRisk: "Baixo", // Default para novos usuários
+      };
+
+      console.log("Enviando para backend (POST):", newEmployeeData);
+
+      setEmployees((prev) => [...prev, employeeWithId]);
+      setIsAddModalOpen(false);
+      alert("Colaborador cadastrado com sucesso!");
+    } catch (error) {
+      console.error("Erro ao criar:", error);
+      alert("Erro ao criar colaborador.");
     }
   };
 
@@ -115,7 +150,10 @@ export default function CollaboratorsList() {
             Gerencie os dados e acompanhe métricas
           </p>
         </div>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors shadow-sm">
+        <button
+          className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors shadow-sm"
+          onClick={handleAddClick}
+        >
           + Adicionar Colaborador
         </button>
       </div>
@@ -219,6 +257,11 @@ export default function CollaboratorsList() {
         onClose={() => setIsModalOpen(false)}
         onSave={handleUpdateEmployee}
         employee={selectedEmployee}
+      />
+      <AddEmployeeModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSave={handleCreateEmployee}
       />
     </div>
   );
