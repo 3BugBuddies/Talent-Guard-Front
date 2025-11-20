@@ -1,4 +1,5 @@
 import { useState } from "react";
+import EditEmployeeModal from "../modals/EditEmployeeModal";
 
 export interface RoleTO {
   id: number;
@@ -59,7 +60,38 @@ const MOCK_EMPLOYEES: EmployeeUI[] = [
 ];
 
 export default function CollaboratorsList() {
-  const [employees] = useState<EmployeeUI[]>(MOCK_EMPLOYEES);
+  const [employees, setEmployees] = useState<EmployeeUI[]>(MOCK_EMPLOYEES);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState<EmployeeTO | null>(
+    null
+  );
+
+  const handleEditClick = (employee: EmployeeUI) => {
+    const { retentionRisk, ...employeeData } = employee;
+    setSelectedEmployee(employeeData);
+    setIsModalOpen(true);
+  };
+
+  const handleUpdateEmployee = async (updatedEmployee: EmployeeTO) => {
+    try {
+      console.log("Enviando para backend:", updatedEmployee);
+
+      setEmployees((prevEmployees) =>
+        prevEmployees.map((emp) =>
+          emp.idEmployee === updatedEmployee.idEmployee
+            ? { ...emp, ...updatedEmployee }
+            : emp
+        )
+      );
+
+      setIsModalOpen(false);
+      alert("Colaborador atualizado com sucesso!");
+    } catch (error) {
+      console.error("Erro ao atualizar:", error);
+      alert("Erro ao atualizar colaborador.");
+    }
+  };
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("pt-BR", {
@@ -170,7 +202,10 @@ export default function CollaboratorsList() {
                 </td>
 
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <button className="text-gray-400 hover:text-blue-600 transition-colors">
+                  <button
+                    className="text-gray-400 hover:text-blue-600 transition-colors"
+                    onClick={() => handleEditClick(emp)}
+                  >
                     Editar
                   </button>
                 </td>
@@ -179,6 +214,12 @@ export default function CollaboratorsList() {
           </tbody>
         </table>
       </div>
+      <EditEmployeeModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSave={handleUpdateEmployee}
+        employee={selectedEmployee}
+      />
     </div>
   );
 }

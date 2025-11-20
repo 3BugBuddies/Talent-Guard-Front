@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Container from "../components/ui/Container";
 import Footer from "../components/Footer";
 import CollaboratorsList from "../components/dashboard/CollaboratorsList";
-import CareerMonitoring from "../components/dashboard/CareerMonitoring";
+// import CareerMonitoring from "../components/dashboard/CareerMonitoring";
 
 type TabOption = "collaborators" | "monitoring";
 
@@ -78,7 +78,8 @@ export default function RHDashboard() {
           {activeTab === "collaborators" ? (
             <CollaboratorsList />
           ) : (
-            <CareerMonitoring />
+            // <CareerMonitoring />
+            <></>
           )}
         </div>
       </Container>
