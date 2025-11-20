@@ -15,7 +15,7 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route
-        path="/admin/benchmark-form"
+        path="/benchmark-form"
         element={
           <PrivateRoute requiredRole="ADMIN">
             <BenchmarkForm />
