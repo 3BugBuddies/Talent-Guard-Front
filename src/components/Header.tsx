@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 
-import MyAccount from "./ui/MyAccount";
 import Container from "./ui/Container";
 
 export default function Header() {
@@ -13,8 +12,6 @@ export default function Header() {
     { name: "Quem Somos", href: "/integrantes" },
     { name: "Info e contato", href: "/contato" },
   ];
-
-  const user = { role: "Paciente", idPaciente: 46 };
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -50,14 +47,13 @@ export default function Header() {
 
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center space-x-2">
-           
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="p-2 text-background-dark-blue hover:text-primary-600 transition-colors"
               aria-label="Toggle menu"
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button> <MyAccount />
+            </button>
           </div>
         </div>
 
