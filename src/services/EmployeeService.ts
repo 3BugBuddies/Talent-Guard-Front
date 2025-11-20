@@ -1,33 +1,46 @@
 import { EmployeeTO } from "../types";
+import { apiRequest } from "./services";
 
-const API_URL = "http://localhost:8080/api/employees";
 
 export const EmployeeService = {
-  update: async (employee: EmployeeTO): Promise<EmployeeTO> => {
-    try {
-      const response = await fetch(`${API_URL}/${employee.idEmployee}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify(employee),
-      });
-
-      if (!response.ok) {
-        throw new Error("Erro ao atualizar colaborador");
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error("Erro no update do EmployeeService:", error);
-      throw error;
-    }
-  },
-
+  /**
+   * Busca todos os colaboradores
+   * GET /employees
+   */
   getAll: async (): Promise<EmployeeTO[]> => {
-    const response = await fetch(API_URL);
-    if (!response.ok) throw new Error("Erro ao buscar colaboradores");
-    return await response.json();
+    return await apiRequest<EmployeeTO[]>("/employees", "GET");
   },
+
+  /**
+   * Busca um colaborador por ID
+   * GET /employees/{id}
+   */
+  getById: async (id: number): Promise<EmployeeTO> => {
+    return await apiRequest<EmployeeTO>(`/employees/${id}`, "GET");
+  },
+
+  /**
+   * Cria um novo colaborador
+   * POST /employees
+   */
+  create: async (employee: Omit<EmployeeTO, "idEmployee">): Promise<EmployeeTO> => {
+    return await apiRequest<EmployeeTO>("/employees", "POST", employee);
+  },
+
+  /**
+   * Atualiza um colaborador existente
+   * PUT /employees/{id}
+   */
+  update: async (employee: EmployeeTO): Promise<EmployeeTO> => {
+    if (!employee.idEmployee) throw new Error("ID do colaborador é obrigatório para atualização");
+    return await apiRequest<EmployeeTO>(`/employees/${employee.idEmployee}`, "PUT", employee);
+  },
+
+  /**
+   * Remove um colaborador
+   * DELETE /employees/{id}
+   */
+  delete: async (id: number): Promise<void> => {
+    return await apiRequest<void>(`/employees/${id}`, "DELETE");
+  }
 };
