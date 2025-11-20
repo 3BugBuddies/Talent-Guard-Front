@@ -1,8 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
-import Team from "./pages/Team";
-import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import PrivateRoute from "./components/PrivateRoute";
 
@@ -33,8 +31,8 @@ function App() {
       />
 
       <Route element={<Layout />}>
-        <Route path="/integrantes" element={<Team />} />
-        <Route path="/contato" element={<Contact />} />
+        {/* <Route path="/integrantes" element={<Team />} />
+        <Route path="/contato" element={<Contact />} /> */}
       </Route>
     </Routes>
   );
