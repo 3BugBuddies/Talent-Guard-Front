@@ -1,44 +1,44 @@
-export type Level = "JUNIOR" | "PLENO" | "SENIOR";
+// src/types/index.ts
 
-export type RiskClassification = "BELOW_FLOOR" | "ON_TARGET" | "ABOVE_CEILING";
+// Enums do Java
+export type Level = "JUNIOR" | "PLENO" | "SENIOR" | "SPECIALIST" | "MANAGER" | "DIRECTOR" | "VP" | "C_LEVEL";
+export type RiskClassification = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
 
+// RoleTO.java
 export interface RoleTO {
-  idRole: number; // Long -> number
+  idRole?: number; // Opcional na criação
   name: string;
-  description: string;
-  level: Level; // Enum
+  level: Level;
+  description?: string;
 }
 
+// EmployeeTO.java
 export interface EmployeeTO {
-  idEmployee: number; // Long -> number
+  idEmployee?: number; // Opcional na criação
   fullName: string;
-  birthDate: string; // LocalDate -> string (ISO format: YYYY-MM-DD)
-  salary: number; // BigDecimal -> number
+  birthDate: string; // LocalDate -> String (ISO)
+  salary: number;    // BigDecimal -> number
   department: string;
   educationLevel: string;
-  hireDate: string; // LocalDate -> string (ISO format)
-  role: RoleTO; // Objeto aninhado
+  hireDate: string;  // LocalDate -> String (ISO)
+  role: RoleTO;      // Objeto aninhado
 }
 
-export interface BenchmarkSalaryTO {
-  idBenchmarkSalary: number; // Long -> number
-  floorSalary: number; // BigDecimal -> number
+// BenchmarkTO.java
+export interface BenchmarkTO {
+  idBenchmark?: number;
+  roleName: string;
+  level: Level;
+  region: string;
+  companySize: string;
   averageSalary: number; // BigDecimal -> number
-  ceilingSalary: number; // BigDecimal -> number
-  referenceDate: string; // LocalDate -> string
-  role: RoleTO; // Relacionamento com Role
 }
 
+// SalaryAnalysisTO.java
 export interface SalaryAnalysisTO {
-  idSalaryAnalysis: number; // Long -> number
-  recordedSalary: number; // BigDecimal -> number
-  marketAverage: number; // BigDecimal -> number
-  risk: RiskClassification; // Enum
-  employee: EmployeeTO; // Objeto completo do funcionário
-  benchmark: BenchmarkSalaryTO; // Objeto completo do benchmark
-}
-
-export interface ErrorResponse {
-  status: number; // int -> number
-  erro: string;
+  employee: EmployeeTO;
+  marketAverage: number;
+  differencePercentage: number;
+  risk: RiskClassification;
+  recommendation: string;
 }
