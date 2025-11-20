@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { EmployeeTO } from "../dashboard/CollaboratorsList";
+import { EmployeeTO, RoleTO } from "../../types";
+import { RoleService } from "../../services/RoleService";
 
 interface EditEmployeeModalProps {
   isOpen: boolean;
@@ -16,11 +17,20 @@ export default function EditEmployeeModal({
 }: EditEmployeeModalProps) {
   const [formData, setFormData] = useState<EmployeeTO | null>(null);
 
+  const [roles, setRoles] = useState<RoleTO[]>([]);
+  const [loadingRoles, setLoadingRoles] = useState(false);
+
   useEffect(() => {
-    if (employee) {
+    if (isOpen && employee) {
       setFormData({ ...employee });
+
+      setLoadingRoles(true);
+      RoleService.getAll()
+        .then(setRoles)
+        .catch((err) => console.error("Erro ao carregar cargos:", err))
+        .finally(() => setLoadingRoles(false));
     }
-  }, [employee]);
+  }, [isOpen, employee]);
 
   if (!isOpen || !formData) return null;
 
@@ -28,14 +38,22 @@ export default function EditEmployeeModal({
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => (prev ? { ...prev, [name]: value } : null));
+    setFormData((prev) => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        [name]: name === "salary" ? parseFloat(value) || 0 : value,
+      };
+    });
   };
 
-  const handleRoleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) =>
-      prev ? { ...prev, role: { ...prev.role, [name]: value } } : null
-    );
+  const handleRoleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedId = Number(e.target.value);
+    const selectedRole = roles.find((r) => r.idRole === selectedId);
+
+    if (selectedRole) {
+      setFormData((prev) => (prev ? { ...prev, role: selectedRole } : null));
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -157,37 +175,37 @@ export default function EditEmployeeModal({
               </select>
             </div>
 
-            {/* -- Seção do Cargo (RoleTO) -- */}
+            {/* -- Seção do Cargo (Atualizada para Select) -- */}
             <div className="col-span-2 pt-2 border-t border-gray-100">
               <p className="text-sm font-semibold text-gray-500 mb-3 uppercase tracking-wide">
                 Dados do Cargo
               </p>
             </div>
 
-            <div>
+            <div className="col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Nome do Cargo
+                Cargo e Função
               </label>
-              <input
-                type="text"
-                name="name"
-                value={formData.role.name}
-                onChange={handleRoleChange}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Nível (Senioridade)
-              </label>
-              <input
-                type="text"
-                name="level"
-                value={formData.role.level}
-                onChange={handleRoleChange}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
-              />
+              {loadingRoles ? (
+                <p className="text-sm text-gray-500">Carregando cargos...</p>
+              ) : (
+                <select
+                  name="role"
+                  value={formData.role?.idRole || ""}
+                  onChange={handleRoleSelect}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                  required
+                >
+                  <option value="" disabled>
+                    Selecione um cargo...
+                  </option>
+                  {roles.map((role) => (
+                    <option key={role.idRole} value={role.idRole}>
+                      {role.name} - {role.level}
+                    </option>
+                  ))}
+                </select>
+              )}
             </div>
           </div>
 
