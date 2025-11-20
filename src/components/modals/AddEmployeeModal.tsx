@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { EmployeeTO } from "../dashboard/CollaboratorsList"; 
+import { useState, useEffect } from "react";
+import { EmployeeTO, RoleTO } from "../../types";
+import { RoleService } from "../../services/RoleService";
 
 type NewEmployee = Omit<EmployeeTO, "idEmployee">;
 
@@ -15,30 +16,56 @@ const INITIAL_STATE: NewEmployee = {
   salary: 0,
   department: "",
   educationLevel: "Graduação",
-  hireDate: new Date().toISOString().split('T')[0],
+  hireDate: new Date().toISOString().split("T")[0],
   role: {
-    id: 0,
+    idRole: 0,
     name: "",
-    level: ""
-  }
+    level: "JUNIOR",
+  },
 };
 
-export default function AddEmployeeModal({ isOpen, onClose, onSave }: AddEmployeeModalProps) {
+export default function AddEmployeeModal({
+  isOpen,
+  onClose,
+  onSave,
+}: AddEmployeeModalProps) {
   const [formData, setFormData] = useState<NewEmployee>(INITIAL_STATE);
+  const [roles, setRoles] = useState<RoleTO[]>([]);
+  const [loadingRoles, setLoadingRoles] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setLoadingRoles(true);
+      RoleService.getAll()
+        .then((data) => setRoles(data))
+        .catch((err) => console.error("Erro ao carregar cargos:", err))
+        .finally(() => setLoadingRoles(false));
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
 
-  const handleRoleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      role: { ...prev.role, [name]: value }
+      [name]: name === "salary" ? parseFloat(value) || 0 : value,
     }));
+  };
+
+  const handleRoleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedId = Number(e.target.value);
+    const selectedRole = roles.find((r) => r.idRole === selectedId);
+
+    if (selectedRole) {
+      setFormData((prev) => ({
+        ...prev,
+        role: selectedRole,
+      }));
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -50,19 +77,24 @@ export default function AddEmployeeModal({ isOpen, onClose, onSave }: AddEmploye
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-fadeIn">
-        
         {/* Header */}
         <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-blue-600 text-white rounded-t-lg">
           <h3 className="text-xl font-bold">Novo Colaborador</h3>
-          <button onClick={onClose} className="text-white hover:text-gray-200 font-bold text-2xl">&times;</button>
+          <button
+            onClick={onClose}
+            className="text-white hover:text-gray-200 font-bold text-2xl"
+          >
+            &times;
+          </button>
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Nome Completo</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Nome Completo
+              </label>
               <input
                 type="text"
                 name="fullName"
@@ -75,7 +107,9 @@ export default function AddEmployeeModal({ isOpen, onClose, onSave }: AddEmploye
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Data de Nascimento</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Data de Nascimento
+              </label>
               <input
                 type="date"
                 name="birthDate"
@@ -87,7 +121,9 @@ export default function AddEmployeeModal({ isOpen, onClose, onSave }: AddEmploye
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Data de Admissão</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Data de Admissão
+              </label>
               <input
                 type="date"
                 name="hireDate"
@@ -99,7 +135,9 @@ export default function AddEmployeeModal({ isOpen, onClose, onSave }: AddEmploye
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Departamento</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Departamento
+              </label>
               <input
                 type="text"
                 name="department"
@@ -112,7 +150,9 @@ export default function AddEmployeeModal({ isOpen, onClose, onSave }: AddEmploye
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Salário (R$)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Salário (R$)
+              </label>
               <input
                 type="number"
                 name="salary"
@@ -125,10 +165,12 @@ export default function AddEmployeeModal({ isOpen, onClose, onSave }: AddEmploye
             </div>
 
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Escolaridade</label>
-              <select 
-                name="educationLevel" 
-                value={formData.educationLevel} 
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Escolaridade
+              </label>
+              <select
+                name="educationLevel"
+                value={formData.educationLevel}
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
               >
@@ -140,35 +182,40 @@ export default function AddEmployeeModal({ isOpen, onClose, onSave }: AddEmploye
               </select>
             </div>
 
-            {/* Seção Cargo */}
+            {/* Seção Cargo*/}
             <div className="col-span-2 pt-2 border-t border-gray-100">
-               <p className="text-sm font-semibold text-gray-500 mb-2 uppercase">Detalhes do Cargo</p>
+              <p className="text-sm font-semibold text-gray-500 mb-2 uppercase">
+                Cargo e Função
+              </p>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Nome do Cargo</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.role.name}
-                onChange={handleRoleChange}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none bg-gray-50"
-                placeholder="Ex: Desenvolvedor Java"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Nível</label>
-              <input
-                type="text"
-                name="level"
-                value={formData.role.level}
-                onChange={handleRoleChange}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none bg-gray-50"
-                placeholder="Ex: Junior, Pleno..."
-                required
-              />
+            <div className="col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Selecione o Cargo
+              </label>
+              {loadingRoles ? (
+                <p className="text-sm text-gray-500">Carregando cargos...</p>
+              ) : (
+                <select
+                  name="role"
+                  value={formData.role.idRole || ""}
+                  onChange={handleRoleSelect}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+                  required
+                >
+                  <option value="" disabled>
+                    Selecione...
+                  </option>
+                  {roles.map((role) => (
+                    <option key={role.idRole} value={role.idRole}>
+                      {role.name} - {role.level}
+                    </option>
+                  ))}
+                </select>
+              )}
+              <p className="text-xs text-gray-500 mt-1">
+                * O nível é definido automaticamente pelo cargo selecionado.
+              </p>
             </div>
           </div>
 
