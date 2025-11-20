@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import PrivateRoute from "./components/PrivateRoute";
 
 import BenchmarkForm from "./components/forms/BenchmarkForm";
+import RHDashboard from "./pages/RHDashboard";
 
 function App() {
   return (
@@ -26,8 +27,7 @@ function App() {
         path="/rh-dashboard"
         element={
           <PrivateRoute requiredRole="RH_USER">
-            <BenchmarkForm />
-            {/* trocar para o dashboard*/}
+            <RHDashboard />
           </PrivateRoute>
         }
       />
