@@ -1,6 +1,7 @@
 import { useState } from "react";
 import EditEmployeeModal from "../modals/EditEmployeeModal";
 import AddEmployeeModal from "../modals/AddEmployeeModal";
+import DeleteConfirmationModal from "../modals/DeleteConfirmationModal";
 
 export interface RoleTO {
   id: number;
@@ -67,6 +68,10 @@ export default function CollaboratorsList() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
+const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [employeeToDelete, setEmployeeToDelete] = useState<EmployeeUI | null>(null);
+
   const [selectedEmployee, setSelectedEmployee] = useState<EmployeeTO | null>(
     null
   );
@@ -79,6 +84,38 @@ export default function CollaboratorsList() {
 
   const handleAddClick = () => {
     setIsAddModalOpen(true);
+  };
+
+  // 3. Função para abrir a modal de exclusão
+  const handleDeleteClick = (employee: EmployeeUI) => {
+    setEmployeeToDelete(employee);
+    setIsDeleteModalOpen(true);
+  };
+
+  // 4. Função para confirmar a exclusão e chamar o serviço
+  const handleConfirmDelete = async () => {
+    if (!employeeToDelete) return;
+
+    try {
+      // Chamada ao Backend (Descomente quando o backend estiver rodando)
+      // await EmployeeService.delete(employeeToDelete.idEmployee);
+      
+      console.log("Removendo colaborador ID:", employeeToDelete.idEmployee);
+
+      // Atualiza o estado local removendo o item
+      setEmployees((prev) => 
+        prev.filter((emp) => emp.idEmployee !== employeeToDelete.idEmployee)
+      );
+
+      alert("Colaborador removido com sucesso!");
+    } catch (error) {
+      console.error("Erro ao remover:", error);
+      alert("Erro ao remover colaborador.");
+    } finally {
+      // Fecha a modal e limpa a seleção
+      setIsDeleteModalOpen(false);
+      setEmployeeToDelete(null);
+    }
   };
 
   const handleUpdateEmployee = async (updatedEmployee: EmployeeTO) => {
@@ -246,6 +283,12 @@ export default function CollaboratorsList() {
                   >
                     Editar
                   </button>
+                  <button
+                      className="text-red-500 hover:text-red-700 transition-colors font-medium"
+                      onClick={() => handleDeleteClick(emp)}
+                    >
+                      Remover
+                    </button>
                 </td>
               </tr>
             ))}
@@ -263,6 +306,14 @@ export default function CollaboratorsList() {
         onClose={() => setIsAddModalOpen(false)}
         onSave={handleCreateEmployee}
       />
+
+      <DeleteConfirmationModal 
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        employeeName={employeeToDelete?.fullName}
+      />
+
     </div>
   );
 }
