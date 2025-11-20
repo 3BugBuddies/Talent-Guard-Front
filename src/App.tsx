@@ -6,23 +6,31 @@ import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import PrivateRoute from "./components/PrivateRoute";
 
-import AdminLayout from "./components/AdminLayout";
+import BenchmarkForm from "./components/forms/BenchmarkForm";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
-
       <Route
-        path="/admin"
+        path="/admin/benchmark-form"
         element={
-          <PrivateRoute requiredRole="Colaborador">
-            <AdminLayout />
+          <PrivateRoute requiredRole="ADMIN">
+            <BenchmarkForm />
           </PrivateRoute>
         }
-      >
-      </Route>
+      />
+
+      <Route
+        path="/rh-dashboard"
+        element={
+          <PrivateRoute requiredRole="RH_USER">
+            <BenchmarkForm />
+            {/* trocar para o dashboard*/}
+          </PrivateRoute>
+        }
+      />
 
       <Route element={<Layout />}>
         <Route path="/integrantes" element={<Team />} />
