@@ -3,12 +3,9 @@ import { useNavigate } from "react-router-dom";
 import Container from "../components/ui/Container";
 import Footer from "../components/Footer";
 import CollaboratorsList from "../components/dashboard/CollaboratorsList";
-import SalaryMatch from "../components/dashboard/SalaryMatch";
-// 1. Importe o novo componente
+import SalaryAnalysisDetails from "../components/dashboard/SalaryAnalisisDetails";
 
-// ... (outros imports, como o CareerMonitoring se houver)
-
-type TabOption = "collaborators" | "salary-match"; // 2. Adicione a opção ao tipo
+type TabOption = "collaborators" | "salary-match"; 
 
 export default function RHDashboard() {
   const navigate = useNavigate();
@@ -65,7 +62,7 @@ export default function RHDashboard() {
         <div className="animate-fadeIn">
           {activeTab === "collaborators" && <CollaboratorsList />}
           {/* 4. Renderização Condicional */}
-          {activeTab === "salary-match" && <SalaryMatch />}
+          {activeTab === "salary-match" && <SalaryAnalysisDetails />}
         </div>
 
       </Container>
