@@ -6,6 +6,7 @@ import PrivateRoute from "./components/PrivateRoute";
 
 import BenchmarkForm from "./components/forms/BenchmarkForm";
 import RHDashboard from "./pages/RHDashboard";
+import AdminBenchmarks from "./pages/admin/AdminBenchmarks";
 
 function App() {
   return (
@@ -13,10 +14,10 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route
-        path="/benchmark-form"
+        path="/admin/benchmarks"
         element={
           <PrivateRoute requiredRole="ADMIN">
-            <BenchmarkForm />
+            <AdminBenchmarks />
           </PrivateRoute>
         }
       />

@@ -2,27 +2,13 @@ import { useState } from "react";
 import EditEmployeeModal from "../modals/EditEmployeeModal";
 import AddEmployeeModal from "../modals/AddEmployeeModal";
 import DeleteConfirmationModal from "../modals/DeleteConfirmationModal";
-
-export interface RoleTO {
-  id: number;
-  name: string;
-  level: string; // Ex: Junior, Pleno, Senior
-}
-
-export interface EmployeeTO {
-  idEmployee: number;
-  fullName: string;
-  birthDate: string;
-  salary: number;
-  department: string;
-  educationLevel: string;
-  hireDate: string;
-  role: RoleTO;
-}
+import { EmployeeTO } from "../../types";
 
 interface EmployeeUI extends EmployeeTO {
   retentionRisk: "Baixo" | "Médio" | "Alto";
 }
+
+type NewEmployee = Omit<EmployeeTO, "idEmployee">;
 
 // 3. Dados Fictícios
 const MOCK_EMPLOYEES: EmployeeUI[] = [
@@ -34,7 +20,7 @@ const MOCK_EMPLOYEES: EmployeeUI[] = [
     department: "TI",
     educationLevel: "Pós-Graduação",
     hireDate: "2021-03-10",
-    role: { id: 101, name: "Desenvolvedor Full Stack", level: "Senior" },
+    role: { idRole: 101, name: "Desenvolvedor Full Stack", level: "SENIOR" },
     retentionRisk: "Baixo",
   },
   {
@@ -45,23 +31,10 @@ const MOCK_EMPLOYEES: EmployeeUI[] = [
     department: "Marketing",
     educationLevel: "Graduação",
     hireDate: "2023-01-15",
-    role: { id: 102, name: "Analista de Marketing", level: "Pleno" },
+    role: { idRole: 102, name: "Analista de Marketing", level: "PLENO" },
     retentionRisk: "Alto",
   },
-  {
-    idEmployee: 3,
-    fullName: "Roberto Costa",
-    birthDate: "1985-12-10",
-    salary: 12000.0,
-    department: "Produto",
-    educationLevel: "Mestrado",
-    hireDate: "2019-11-01",
-    role: { id: 103, name: "Gerente de Projetos", level: "Gestão" },
-    retentionRisk: "Médio",
-  },
 ];
-
-type NewEmployee = Omit<EmployeeTO, "idEmployee">;
 
 export default function CollaboratorsList() {
   const [employees, setEmployees] = useState<EmployeeUI[]>(MOCK_EMPLOYEES);
@@ -69,8 +42,10 @@ export default function CollaboratorsList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [employeeToDelete, setEmployeeToDelete] = useState<EmployeeUI | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [employeeToDelete, setEmployeeToDelete] = useState<EmployeeUI | null>(
+    null
+  );
 
   const [selectedEmployee, setSelectedEmployee] = useState<EmployeeTO | null>(
     null
@@ -86,33 +61,26 @@ const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     setIsAddModalOpen(true);
   };
 
-  // 3. Função para abrir a modal de exclusão
   const handleDeleteClick = (employee: EmployeeUI) => {
     setEmployeeToDelete(employee);
     setIsDeleteModalOpen(true);
   };
 
-  // 4. Função para confirmar a exclusão e chamar o serviço
   const handleConfirmDelete = async () => {
-    if (!employeeToDelete) return;
+    if (!employeeToDelete || !employeeToDelete.idEmployee) return;
 
     try {
-      // Chamada ao Backend (Descomente quando o backend estiver rodando)
       // await EmployeeService.delete(employeeToDelete.idEmployee);
-      
       console.log("Removendo colaborador ID:", employeeToDelete.idEmployee);
 
-      // Atualiza o estado local removendo o item
-      setEmployees((prev) => 
+      setEmployees((prev) =>
         prev.filter((emp) => emp.idEmployee !== employeeToDelete.idEmployee)
       );
-
       alert("Colaborador removido com sucesso!");
     } catch (error) {
       console.error("Erro ao remover:", error);
       alert("Erro ao remover colaborador.");
     } finally {
-      // Fecha a modal e limpa a seleção
       setIsDeleteModalOpen(false);
       setEmployeeToDelete(null);
     }
@@ -120,12 +88,13 @@ const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleUpdateEmployee = async (updatedEmployee: EmployeeTO) => {
     try {
+      // await EmployeeService.update(updatedEmployee);
       console.log("Enviando para backend:", updatedEmployee);
 
       setEmployees((prevEmployees) =>
         prevEmployees.map((emp) =>
           emp.idEmployee === updatedEmployee.idEmployee
-            ? { ...emp, ...updatedEmployee }
+            ? { ...emp, ...updatedEmployee, retentionRisk: emp.retentionRisk }
             : emp
         )
       );
@@ -144,14 +113,17 @@ const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
       const newId =
         employees.length > 0
-          ? Math.max(...employees.map((e) => e.idEmployee)) + 1
+          ? Math.max(...employees.map((e) => e.idEmployee || 0)) + 1
           : 1;
 
       const employeeWithId: EmployeeUI = {
         ...newEmployeeData,
         idEmployee: newId,
-        role: { ...newEmployeeData.role, id: newId + 100 }, // Mock ID do cargo
-        retentionRisk: "Baixo", // Default para novos usuários
+        role: {
+          ...newEmployeeData.role,
+          idRole: newEmployeeData.role.idRole || 0,
+        },
+        retentionRisk: "Baixo",
       };
 
       console.log("Enviando para backend (POST):", newEmployeeData);
@@ -173,6 +145,7 @@ const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   };
 
   const formatDate = (dateString: string) => {
+    if (!dateString) return "-";
     return new Date(dateString).toLocaleDateString("pt-BR");
   };
 
@@ -284,11 +257,11 @@ const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
                     Editar
                   </button>
                   <button
-                      className="text-red-500 hover:text-red-700 transition-colors font-medium"
-                      onClick={() => handleDeleteClick(emp)}
-                    >
-                      Remover
-                    </button>
+                    className="text-red-500 hover:text-red-700 transition-colors font-medium"
+                    onClick={() => handleDeleteClick(emp)}
+                  >
+                    Remover
+                  </button>
                 </td>
               </tr>
             ))}
@@ -307,13 +280,12 @@ const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
         onSave={handleCreateEmployee}
       />
 
-      <DeleteConfirmationModal 
+      <DeleteConfirmationModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={handleConfirmDelete}
         employeeName={employeeToDelete?.fullName}
       />
-
     </div>
   );
 }
