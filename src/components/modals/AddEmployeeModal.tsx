@@ -37,8 +37,7 @@ export default function AddEmployeeModal({
     if (isOpen) {
       setLoadingRoles(true);
       RoleService.getAll()
-        .then((data) => setRoles(data))
-        .catch((err) => console.error("Erro ao carregar cargos:", err))
+        .then(setRoles)
         .finally(() => setLoadingRoles(false));
     }
   }, [isOpen]);
@@ -49,7 +48,6 @@ export default function AddEmployeeModal({
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-
     setFormData((prev) => ({
       ...prev,
       [name]: name === "salary" ? parseFloat(value) || 0 : value,
@@ -61,10 +59,7 @@ export default function AddEmployeeModal({
     const selectedRole = roles.find((r) => r.idRole === selectedId);
 
     if (selectedRole) {
-      setFormData((prev) => ({
-        ...prev,
-        role: selectedRole,
-      }));
+      setFormData((prev) => ({ ...prev, role: selectedRole }));
     }
   };
 
@@ -77,22 +72,18 @@ export default function AddEmployeeModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-fadeIn">
-        {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-blue-600 text-white rounded-t-lg">
+        <div className="px-6 py-4 border-b border-gray-200 bg-blue-600 text-white rounded-t-lg flex justify-between">
           <h3 className="text-xl font-bold">Novo Colaborador</h3>
-          <button
-            onClick={onClose}
-            className="text-white hover:text-gray-200 font-bold text-2xl"
-          >
+          <button onClick={onClose} className="text-white text-2xl">
             &times;
           </button>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Nome */}
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700">
                 Nome Completo
               </label>
               <input
@@ -100,42 +91,42 @@ export default function AddEmployeeModal({
                 name="fullName"
                 value={formData.fullName}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-                placeholder="Ex: Ana Silva"
+                className="w-full border p-2 rounded"
                 required
               />
             </div>
 
+            {/* Datas */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Data de Nascimento
+              <label className="block text-sm font-medium text-gray-700">
+                Nascimento
               </label>
               <input
                 type="date"
                 name="birthDate"
                 value={formData.birthDate}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full border p-2 rounded"
                 required
               />
             </div>
-
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Data de Admissão
+              <label className="block text-sm font-medium text-gray-700">
+                Admissão
               </label>
               <input
                 type="date"
                 name="hireDate"
                 value={formData.hireDate}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full border p-2 rounded"
                 required
               />
             </div>
 
+            {/* Departamento e Salário */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700">
                 Departamento
               </label>
               <input
@@ -143,38 +134,36 @@ export default function AddEmployeeModal({
                 name="department"
                 value={formData.department}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-                placeholder="Ex: TI, RH..."
+                className="w-full border p-2 rounded"
                 required
               />
             </div>
-
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700">
                 Salário (R$)
               </label>
               <input
                 type="number"
+                step="0.01"
                 name="salary"
                 value={formData.salary}
                 onChange={handleChange}
-                step="0.01"
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full border p-2 rounded"
                 required
               />
             </div>
 
+            {/* Escolaridade */}
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700">
                 Escolaridade
               </label>
               <select
                 name="educationLevel"
                 value={formData.educationLevel}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full border p-2 rounded"
               >
-                <option value="Ensino Médio">Ensino Médio</option>
                 <option value="Graduação">Graduação</option>
                 <option value="Pós-Graduação">Pós-Graduação</option>
                 <option value="Mestrado">Mestrado</option>
@@ -182,56 +171,49 @@ export default function AddEmployeeModal({
               </select>
             </div>
 
-            {/* Seção Cargo*/}
-            <div className="col-span-2 pt-2 border-t border-gray-100">
-              <p className="text-sm font-semibold text-gray-500 mb-2 uppercase">
-                Cargo e Função
-              </p>
+            <div className="col-span-2 border-t pt-4 mt-2">
+              <h4 className="font-bold text-gray-600">Dados do Cargo (Role)</h4>
             </div>
 
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Selecione o Cargo
+              <label className="block text-sm font-medium text-gray-700">
+                Selecionar Cargo Existente
               </label>
               {loadingRoles ? (
-                <p className="text-sm text-gray-500">Carregando cargos...</p>
+                <p>Carregando...</p>
               ) : (
                 <select
-                  name="role"
                   value={formData.role.idRole || ""}
                   onChange={handleRoleSelect}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+                  className="w-full border p-2 rounded bg-gray-50"
                   required
                 >
                   <option value="" disabled>
                     Selecione...
                   </option>
-                  {roles.map((role) => (
-                    <option key={role.idRole} value={role.idRole}>
-                      {role.name} - {role.level}
+                  {roles.map((r) => (
+                    <option key={r.idRole} value={r.idRole}>
+                      {r.name} - {r.level}
                     </option>
                   ))}
                 </select>
               )}
-              <p className="text-xs text-gray-500 mt-1">
-                * O nível é definido automaticamente pelo cargo selecionado.
-              </p>
             </div>
           </div>
 
-          <div className="flex justify-end gap-3 pt-6 border-t border-gray-100">
+          <div className="flex justify-end gap-3 pt-4 border-t mt-4">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+              className="px-4 py-2 border rounded text-gray-700"
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium shadow-lg shadow-blue-200"
+              className="px-6 py-2 bg-blue-600 text-white rounded shadow"
             >
-              Cadastrar Colaborador
+              Salvar
             </button>
           </div>
         </form>

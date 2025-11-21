@@ -1,37 +1,7 @@
 import { useState } from "react";
 import { BenchmarkService } from "../../services/BenchmarkService";
-import { BenchmarkTO, Level } from "../../types";
-
-// Lista de Níveis (Enum)
-const LEVELS: Level[] = [
-  "JUNIOR",
-  "PLENO",
-  "SENIOR",
-  "SPECIALIST",
-  "MANAGER",
-  "DIRECTOR",
-  "VP",
-  "C_LEVEL",
-];
-
-// Lista de Cargos Comuns (Varejo & Tech)
-const COMMON_ROLES = [
-  "Vendedor de Loja",
-  "Gerente de Loja",
-  "Caixa",
-  "Supervisor de Vendas", // Varejo
-  "Desenvolvedor Frontend",
-  "Desenvolvedor Backend",
-  "Full Stack Developer", // Tech
-  "DevOps Engineer",
-  "Data Scientist",
-  "Product Owner",
-  "Scrum Master",
-  "UX/UI Designer",
-  "Analista de Suporte",
-  "QA Engineer",
-];
-
+import { BenchmarkTO } from "../../types";
+import { COMMON_ROLES, LEVELS } from "../../constants";
 interface BenchmarkFormProps {
   onSuccess: () => void;
 }
@@ -61,7 +31,6 @@ export default function BenchmarkForm({ onSuccess }: BenchmarkFormProps) {
       await BenchmarkService.create(formData);
       alert("Benchmark de mercado criado com sucesso!");
 
-      // Limpa o form
       setFormData({
         roleName: "",
         level: "JUNIOR",
@@ -70,7 +39,6 @@ export default function BenchmarkForm({ onSuccess }: BenchmarkFormProps) {
         averageSalary: 0,
       });
 
-      // Avisa o componente pai para recarregar a lista
       onSuccess();
     } catch (error) {
       console.error("Erro ao criar benchmark:", error);
