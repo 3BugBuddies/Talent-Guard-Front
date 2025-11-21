@@ -4,9 +4,11 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import PrivateRoute from "./components/PrivateRoute";
 
-import BenchmarkForm from "./components/forms/BenchmarkForm";
 import RHDashboard from "./pages/RHDashboard";
 import AdminBenchmarks from "./pages/admin/AdminBenchmarks";
+import AdminLayout from "./components/AdminLayout";
+import AdminHome from "./pages/admin/AdminHome";
+import AdminRoles from "./pages/admin/AdminRoles";
 
 function App() {
   return (
@@ -14,13 +16,17 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route
-        path="/admin/benchmarks"
+        path="/admin"
         element={
           <PrivateRoute requiredRole="ADMIN">
-            <AdminBenchmarks />
+            <AdminLayout />
           </PrivateRoute>
         }
-      />
+      >
+        <Route index element={<AdminHome />} />
+        <Route path="roles" element={<AdminRoles />} />
+        <Route path="benchmarks" element={<AdminBenchmarks />} />{" "}
+      </Route>
 
       <Route
         path="/rh-dashboard"

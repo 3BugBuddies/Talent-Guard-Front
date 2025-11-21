@@ -267,3 +267,203 @@ export default function SalaryAnalysisDetails() {
     </div>
   );
 }
+
+
+
+// import { useEffect, useState } from "react";
+// import { SalaryAnalysisTO } from "../../types";
+// // import { SalaryAnalysisService } from "../../services/SalaryAnalysisService"; 
+// // ^ Supondo que você tenha o service que chama o endpoint GET /salary-analysis
+
+// // --- MOCK TEMPORÁRIO PARA VOCÊ VER A TELA FUNCIONANDO ---
+// // (Remova isso quando conectar com a API real)
+// const MOCK_DATA: SalaryAnalysisTO[] = [
+//   {
+//     employee: { idEmployee: 1, fullName: "Ana Silva", salary: 8500, role: { idRole: 1, name: "Dev Senior", level: "SENIOR" }, department: "TI", hireDate: "2020-01-01", educationLevel: "Pós", birthDate: "1990-01-01" },
+//     marketAverage: 10000,
+//     compaRatio: 0.85,
+//     differencePercentage: -15,
+//     percentile: "Abaixo da Média",
+//     replacementCost: 38250,
+//     suggestedRaise: 1500,
+//     performanceRating: "Top Performer",
+//     monthsSinceLastIncrease: 25,
+//     risk: "CRITICAL",
+//     recommendation: "Risco Crítico: Top Performer com salário defasado. Ajuste urgente."
+//   },
+//   {
+//     employee: { idEmployee: 2, fullName: "João Santos", salary: 12000, role: { idRole: 2, name: "Dev Senior", level: "SENIOR" }, department: "TI", hireDate: "2019-05-01", educationLevel: "MBA", birthDate: "1988-05-01" },
+//     marketAverage: 10000,
+//     compaRatio: 1.2,
+//     differencePercentage: 20,
+//     percentile: "Acima da Média",
+//     replacementCost: 54000,
+//     suggestedRaise: 0,
+//     performanceRating: "Médio",
+//     monthsSinceLastIncrease: 5,
+//     risk: "LOW",
+//     recommendation: "Salário competitivo. Retenção segura."
+//   }
+// ];
+
+// export default function SalaryAnalysisDetails() {
+//   const [analyses, setAnalyses] = useState<SalaryAnalysisTO[]>([]);
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     // Aqui você chamaria: SalaryAnalysisService.getAll().then(setAnalyses)...
+//     // Usando Mock para demonstração imediata:
+//     setTimeout(() => {
+//       setAnalyses(MOCK_DATA);
+//       setLoading(false);
+//     }, 800);
+//   }, []);
+
+//   // Helpers de Formatação
+//   const formatMoney = (val: number) => new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(val);
+
+//   // Cálculos de Totais para os Cards (Feitos no Front apenas para somar)
+//   const totalBudgetGap = analyses.reduce((acc, curr) => acc + curr.suggestedRaise, 0);
+//   const totalChurnCost = analyses.filter(a => a.risk === "CRITICAL" || a.risk === "HIGH").reduce((acc, curr) => acc + curr.replacementCost, 0);
+
+//   if (loading) return <div className="p-10 text-center text-gray-500">Carregando inteligência salarial...</div>;
+
+//   return (
+//     <div className="space-y-6 animate-fadeIn font-outfit">
+      
+//       {/* 1. CARDS DE KPI (Resumo Executivo) */}
+//       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+//         {/* Card de Budget */}
+//         <div className="bg-gradient-to-r from-blue-700 to-blue-900 rounded-xl p-6 text-white shadow-lg relative overflow-hidden">
+//           <div className="relative z-10">
+//             <h4 className="text-blue-100 text-xs font-bold uppercase tracking-wider">Investimento Necessário</h4>
+//             <div className="text-3xl font-bold mt-1">{formatMoney(totalBudgetGap)}</div>
+//             <p className="text-xs text-blue-200 mt-2">Para corrigir todas as defasagens salariais.</p>
+//           </div>
+//         </div>
+
+//         {/* Card de Economia (ROI) */}
+//         <div className="bg-white border-l-4 border-orange-500 rounded-xl p-6 shadow-sm">
+//           <h4 className="text-gray-500 text-xs font-bold uppercase tracking-wider">Custo de Perda (Risco)</h4>
+//           <div className="text-3xl font-bold text-gray-800 mt-1">{formatMoney(totalChurnCost)}</div>
+//           <p className="text-xs text-orange-600 mt-2 font-medium">
+//             Prejuízo estimado se os talentos em risco saírem hoje.
+//           </p>
+//         </div>
+
+//         {/* Card de Equilíbrio */}
+//         <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+//           <h4 className="text-gray-500 text-xs font-bold uppercase tracking-wider">Saúde da Folha</h4>
+//           <div className="mt-3 flex items-center gap-2">
+//             <div className="flex-1 bg-gray-200 rounded-full h-3">
+//               <div className="bg-green-500 h-3 rounded-full" style={{ width: '75%' }}></div>
+//             </div>
+//             <span className="text-sm font-bold text-green-700">Saudável</span>
+//           </div>
+//           <p className="text-xs text-gray-400 mt-2">A maioria dos salários está na zona segura (0.8 - 1.2).</p>
+//         </div>
+//       </div>
+
+//       {/* 2. TABELA DETALHADA */}
+//       <div className="bg-white rounded-lg shadow border border-gray-100 overflow-hidden">
+//         <div className="px-6 py-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
+//           <h3 className="font-bold text-gray-800">Diagnóstico Individual</h3>
+//           <span className="text-xs text-gray-500 bg-white border px-2 py-1 rounded">
+//             Dados processados pelo Backend
+//           </span>
+//         </div>
+
+//         <table className="min-w-full divide-y divide-gray-200">
+//           <thead className="bg-gray-50">
+//             <tr>
+//               <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase">Talento</th>
+//               <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase">Performance (Simulado)</th>
+//               <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase">Compa-Ratio</th>
+//               <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase">Diagnóstico (IA)</th>
+//               <th className="px-6 py-3 text-right text-xs font-bold text-gray-500 uppercase">Ação</th>
+//             </tr>
+//           </thead>
+//           <tbody className="bg-white divide-y divide-gray-200">
+//             {analyses.map((item, idx) => (
+//               <tr key={idx} className="hover:bg-blue-50/50 transition-colors group">
+                
+//                 {/* Coluna 1: Info Básica */}
+//                 <td className="px-6 py-4">
+//                   <div className="flex flex-col">
+//                     <span className="font-bold text-gray-900">{item.employee.fullName}</span>
+//                     <span className="text-xs text-gray-500">{item.employee.role.name}</span>
+//                   </div>
+//                 </td>
+
+//                 {/* Coluna 2: Performance (Vinda do Java) */}
+//                 <td className="px-6 py-4">
+//                   <span className={`px-2 py-1 text-xs font-bold rounded-md border 
+//                     ${item.performanceRating === 'Top Performer' ? 'bg-purple-100 text-purple-700 border-purple-200' : 
+//                       item.performanceRating === 'Alto' ? 'bg-blue-100 text-blue-700 border-blue-200' :
+//                       'bg-gray-100 text-gray-600'}`}>
+//                     {item.performanceRating}
+//                   </span>
+//                   <div className="text-[10px] text-gray-400 mt-1">
+//                     {item.monthsSinceLastIncrease} meses s/ aumento
+//                   </div>
+//                 </td>
+
+//                 {/* Coluna 3: Barra Visual (Compa-Ratio) */}
+//                 <td className="px-6 py-4 w-64">
+//                   <div className="flex justify-between text-xs mb-1">
+//                     <span className="font-mono">{formatMoney(item.employee.salary)}</span>
+//                     <span className="text-gray-400">Ref: {formatMoney(item.marketAverage)}</span>
+//                   </div>
+//                   {/* Barra de Progresso */}
+//                   <div className="relative w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+//                     <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-black/20 z-10"></div>
+//                     <div 
+//                       className={`h-full rounded-full ${
+//                         item.compaRatio < 0.85 ? 'bg-red-500' : 
+//                         item.compaRatio > 1.15 ? 'bg-green-500' : 'bg-blue-500'
+//                       }`}
+//                       style={{ width: `${Math.min(item.compaRatio * 50, 100)}%` }}
+//                     ></div>
+//                   </div>
+//                   <div className="text-xs text-right mt-1 font-bold text-gray-600">
+//                     {Math.round(item.compaRatio * 100)}% do Mercado
+//                   </div>
+//                 </td>
+
+//                 {/* Coluna 4: Risco e Recomendação (Vindos do Java) */}
+//                 <td className="px-6 py-4">
+//                   {item.risk === 'CRITICAL' && (
+//                      <span className="text-red-600 text-xs font-bold flex items-center gap-1">
+//                        <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span> CRÍTICO
+//                      </span>
+//                   )}
+//                   {item.risk === 'LOW' && <span className="text-green-600 text-xs font-bold">Estável</span>}
+                  
+//                   <p className="text-[11px] text-gray-500 leading-tight mt-1 max-w-[200px]">
+//                     {item.recommendation}
+//                   </p>
+//                 </td>
+
+//                 {/* Coluna 5: Ação (Sugestão do Java) */}
+//                 <td className="px-6 py-4 text-right">
+//                   {item.suggestedRaise > 0 ? (
+//                     <div className="flex flex-col items-end">
+//                       <span className="text-[10px] text-gray-400 uppercase">Ajuste Sugerido</span>
+//                       <span className="text-sm font-bold text-green-600">+{formatMoney(item.suggestedRaise)}</span>
+//                       <button className="mt-1 text-[10px] bg-gray-900 text-white px-2 py-1 rounded hover:bg-black">
+//                         Aplicar
+//                       </button>
+//                     </div>
+//                   ) : (
+//                     <span className="text-xs text-gray-400 italic">Nenhuma ação</span>
+//                   )}
+//                 </td>
+
+//               </tr>
+//             ))}
+//           </tbody>
+//         </table>
+//       </div>
+//     </div>
+//   );
+// }

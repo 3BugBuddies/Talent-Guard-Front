@@ -1,88 +1,67 @@
-import React from "react";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { UserTO } from "../types";
-import Container from "./ui/Container";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 
-const AdminLayout: React.FC = () => {
+export default function AdminLayout() {
+  const location = useLocation();
   const navigate = useNavigate();
-  const userString = localStorage.getItem("user");
-  let user: UserTO | null = null;
-  if (userString) {
-    try {
-      user = JSON.parse(userString) as UserTO;
-    } catch (e) {
-      console.error("Erro ao ler dados do usuário logado.");
-    }
-  }
 
   const handleLogout = () => {
-    localStorage.clear();
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
     navigate("/login");
   };
 
-  const navItems = [
-    { name: "Dashboard", path: "/admin/dashboard" },
-    { name: "Colaborador", path: "/admin/colaborador" },
+  const menuItems = [
+    { label: "Visão Geral", path: "/admin", exact: true },
+    { label: "Gestão de Cargos", path: "/admin/roles" },
+    { label: "Benchmarks de Mercado", path: "/admin/benchmarks" },
   ];
 
+  const isActive = (path: string, exact = false) => {
+    return exact ? location.pathname === path : location.pathname.startsWith(path);
+  };
+
   return (
-    <div className="flex flex-col h-screen bg-background-light-blue">
-      <header className="bg-background-light-blue shadow-md sticky top-0 z-50">
-        <Container>
-          <div className="flex items-center justify-between h-24">
-            <div className="flex-shrink-0">
-              <img
-                src="/img/Elo-Logotipo.png"
-                alt="Talent Guard Logo"
-                className="h-20 w-auto"
-              />
-            </div>
-          </div>
-        </Container>
-      </header>
-
-      <div className="flex flex-1 overflow-hidden">
-        <div className="w-64 bg-background-dark-blue text-white flex flex-col overflow-y-auto">
-          <div className="p-6 text-center text-2xl font-bold">
-            Talent Guard Admin
-          </div>
-          <nav className="flex-grow p-4 space-y-2">
-            {navItems.map((item) => (
-              <NavLink
-                key={item.path}
-                to={item.path}
-                className={({ isActive }) =>
-                  `block px-4 py-2 rounded-md transition duration-150 ${
-                    isActive
-                      ? "bg-blue-600 text-white font-semibold"
-                      : "hover:bg-blue-700 text-blue-100"
-                  }`
-                }
-              >
-                {item.name}
-              </NavLink>
-            ))}
-          </nav>
-
-          <div className="p-6 border-t border-blue-600 text-center gap-4 flex flex-col">
-            <p className="text-sm font-semibold truncate">
-              {user?.nomeCompleto || "Colaborador"}
-            </p>
-            <button
-              onClick={handleLogout}
-              className="w-full mt-2 text-sm bg-red-700 hover:bg-red-700 text-white py-1 rounded transition duration-150"
-            >
-              Sair
-            </button>
-          </div>
+    <div className="min-h-screen bg-gray-100 flex font-outfit">
+      
+      {/* Sidebar */}
+      <aside className="w-64 bg-gray-900 text-white flex flex-col flex-shrink-0 transition-all duration-300">
+        <div className="h-16 flex items-center px-6 border-b border-gray-800 bg-gray-900">
+          <span className="text-xl font-bold tracking-tight">Talent Guard <span className="text-blue-500">Admin</span></span>
         </div>
 
-        <main className="flex-1 overflow-y-auto p-6">
-          <Outlet />
-        </main>
-      </div>
+        <nav className="flex-1 px-3 py-6 space-y-1 overflow-y-auto">
+          {menuItems.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`flex items-center px-4 py-3 text-sm font-medium rounded-md transition-colors ${
+                isActive(item.path, item.exact)
+                  ? "bg-blue-600 text-white shadow-lg shadow-blue-900/50"
+                  : "text-gray-400 hover:bg-gray-800 hover:text-white"
+              }`}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="p-4 border-t border-gray-800">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none transition-colors"
+          >
+            Sair do Sistema
+          </button>
+        </div>
+      </aside>
+      
+      <main className="flex-1 overflow-y-auto focus:outline-none">
+        <div className="py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+            <Outlet />
+          </div>
+        </div>
+      </main>
     </div>
   );
-};
-
-export default AdminLayout;
+}

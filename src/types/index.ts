@@ -1,46 +1,36 @@
-// Enums do Java
-export type Level =
-  | "JUNIOR"
-  | "PLENO"
-  | "SENIOR"
-  | "SPECIALIST"
-  | "MANAGER"
-  | "DIRECTOR"
-  | "VP"
-  | "C_LEVEL";
+// Enum de Risco (br.com.fiap.enums.RiskClassification)
 export type RiskClassification = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
 
-// RoleTO.java
+// DTO de Cargo
 export interface RoleTO {
-  idRole?: number; // Opcional na criação
+  idRole: number;
   name: string;
   level: Level;
-  description?: string;
 }
 
-// EmployeeTO.java
+// DTO de Colaborador
 export interface EmployeeTO {
-  idEmployee?: number; // Opcional na criação
+  idEmployee: number; 
   fullName: string;
-  birthDate: string; // LocalDate -> String (ISO)
-  salary: number; // BigDecimal -> number
+  birthDate: string; // Formato YYYY-MM-DD
+  salary: number;
   department: string;
   educationLevel: string;
-  hireDate: string; // LocalDate -> String (ISO)
-  role: RoleTO; // Objeto aninhado
+  hireDate: string; // Formato YYYY-MM-DD
+  role: RoleTO;     // Objeto aninhado obrigatório
 }
 
-// BenchmarkTO.java
+// DTO de Benchmark (Dados de Mercado)
 export interface BenchmarkTO {
   idBenchmark?: number;
   roleName: string;
   level: Level;
   region: string;
   companySize: string;
-  averageSalary: number; // BigDecimal -> number
+  averageSalary: number;
 }
 
-// SalaryAnalysisTO.java
+// DTO de Análise Salarial
 export interface SalaryAnalysisTO {
   employee: EmployeeTO;
   marketAverage: number;
@@ -49,13 +39,64 @@ export interface SalaryAnalysisTO {
   recommendation: string;
 }
 
-// Tipo para uso exclusivo no Front (Estende o original)
+// Tipo Estendido para o Frontend (para o Dashboard Visual)
 export interface SalaryAnalysisEnhanced extends SalaryAnalysisTO {
   compaRatio: number;
   percentile: string;
   replacementCost: number;
   suggestedRaise: number;
-
   performanceRating: "Baixo" | "Médio" | "Alto" | "Top Performer";
   lastIncreaseMonths: number;
 }
+
+
+// Enums
+export type Level = "JUNIOR" | "PLENO" | "SENIOR" | "SPECIALIST" | "MANAGER" | "DIRECTOR" | "VP" | "C_LEVEL";
+// export type RiskClassification = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+
+// export interface RoleTO {
+//   idRole: number;
+//   name: string;
+//   level: Level;
+// }
+
+// export interface EmployeeTO {
+//   idEmployee: number;
+//   fullName: string;
+//   birthDate: string;
+//   salary: number;
+//   department: string;
+//   educationLevel: string;
+//   hireDate: string;
+//   role: RoleTO;
+// }
+
+// export interface BenchmarkTO {
+//   idBenchmark?: number;
+//   roleName: string;
+//   level: Level;
+//   region: string;
+//   companySize: string;
+//   averageSalary: number;
+// }
+
+// // O DTO INTELIGENTE QUE VEM DO BACKEND
+// export interface SalaryAnalysisTO {
+//   employee: EmployeeTO;
+//   marketAverage: number;
+  
+//   // Dados Processados pelo Java
+//   compaRatio: number;          // Ex: 0.85
+//   differencePercentage: number; 
+//   percentile: string;          // "Abaixo da Média"
+//   replacementCost: number;     // R$ 45.000,00
+//   suggestedRaise: number;      // R$ 1.500,00
+  
+//   // Dados Simulados/Inferidos pelo Java
+//   performanceRating: "Baixo" | "Médio" | "Alto" | "Top Performer";
+//   monthsSinceLastIncrease: number;
+
+//   // Decisão de Negócio do Java
+//   risk: RiskClassification;
+//   recommendation: string;
+// }
