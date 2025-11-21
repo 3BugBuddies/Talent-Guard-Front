@@ -33,7 +33,7 @@ export default function SalaryMatch() {
       // 2. Para cada colaborador, solicita a análise ao backend
       // Nota: Em produção real, o ideal seria um endpoint de "Bulk Analysis" no backend
       const analysisPromises = employees.map((emp) =>
-        SalaryAnalysisService.analyze(emp)
+        SalaryAnalysisService.analyzeEnhanced(emp)
       );
 
       const results = await Promise.all(analysisPromises);
