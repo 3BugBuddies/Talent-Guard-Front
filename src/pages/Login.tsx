@@ -77,7 +77,7 @@ export default function Login() {
         localStorage.setItem("userRole", authenticatedUser.role);
 
         if (authenticatedUser.role === "ADMIN") {
-          navigate("/benchmark-form", { replace: true });
+          navigate("/admin/benchmarks", { replace: true });
         } else {
           navigate("/rh-dashboard", { replace: true });
         }
