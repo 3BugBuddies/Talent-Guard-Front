@@ -10,34 +10,10 @@ interface EmployeeUI extends EmployeeTO {
 
 type NewEmployee = Omit<EmployeeTO, "idEmployee">;
 
-// 3. Dados Fictícios
-const MOCK_EMPLOYEES: EmployeeUI[] = [
-  {
-    idEmployee: 1,
-    fullName: "Carlos Oliveira",
-    birthDate: "1990-05-15",
-    salary: 8500.0,
-    department: "TI",
-    educationLevel: "Pós-Graduação",
-    hireDate: "2021-03-10",
-    role: { idRole: 101, name: "Desenvolvedor Full Stack", level: "SENIOR" },
-    retentionRisk: "Baixo",
-  },
-  {
-    idEmployee: 2,
-    fullName: "Mariana Santos",
-    birthDate: "1995-08-20",
-    salary: 4200.0,
-    department: "Marketing",
-    educationLevel: "Graduação",
-    hireDate: "2023-01-15",
-    role: { idRole: 102, name: "Analista de Marketing", level: "PLENO" },
-    retentionRisk: "Alto",
-  },
-];
+
 
 export default function CollaboratorsList() {
-  const [employees, setEmployees] = useState<EmployeeUI[]>(MOCK_EMPLOYEES);
+  const [employees, setEmployees] = useState<EmployeeUI[]>([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);

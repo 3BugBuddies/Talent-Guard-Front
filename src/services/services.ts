@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8080/talent-guard"; 
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080/api";
 
 /**
  * Função genérica realiza requisições HTTP à API Talent Guard.
@@ -33,7 +33,7 @@ export async function apiRequest<T>(
   }
 
   try {
-    const response = await fetch(`${BASE_URL}${endpoint}`, config);
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
 
     // Tratamento de Erros HTTP (4xx, 5xx)
     if (!response.ok) {
