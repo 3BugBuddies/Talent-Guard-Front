@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Container from "../components/ui/Container";
 import Button from "../components/ui/Button";
@@ -104,6 +104,10 @@ export default function Login() {
       setPassword(RH_DATA.password);
     }
   };
+
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
 
   return (
     <Container className="flex items-center justify-center min-h-screen bg-gray-100">

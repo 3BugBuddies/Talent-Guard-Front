@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8080/talent-guard"; 
+const BASE_URL = "https://talent-guard-api.onrender.com"; 
 
 /**
  * Função genérica realiza requisições HTTP à API Talent Guard.
