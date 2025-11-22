@@ -1,46 +1,56 @@
-// Enum de Risco (br.com.fiap.enums.RiskClassification)
+export type Level =
+  | "JUNIOR"
+  | "PLENO"
+  | "SENIOR"
+  | "SPECIALIST"
+  | "MANAGER"
+  | "DIRECTOR"
+  | "VP"
+  | "C_LEVEL";
+
 export type RiskClassification = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
 
-// DTO de Cargo
 export interface RoleTO {
-  idRole: number;
+  idRole?: number;
   name: string;
+  description?: string;
   level: Level;
 }
 
-// DTO de Colaborador
 export interface EmployeeTO {
-  idEmployee: number; 
+  idEmployee?: number;
   fullName: string;
-  birthDate: string; // Formato YYYY-MM-DD
+  birthDate: string; // YYYY-MM-DD
+  hireDate: string; // YYYY-MM-DD
   salary: number;
   department: string;
   educationLevel: string;
-  hireDate: string; // Formato YYYY-MM-DD
-  role: RoleTO;     // Objeto aninhado obrigatório
+  role: RoleTO;
 }
-
-// DTO de Benchmark (Dados de Mercado)
 export interface BenchmarkTO {
   idBenchmark?: number;
-  roleName: string;
-  level: Level;
-  region: string;
-  companySize: string;
+  floorSalary: number;
   averageSalary: number;
+  ceilingSalary: number;
+  referenceDate?: string; // YYYY-MM-DD
+  role: RoleTO;
 }
 
-// DTO de Análise Salarial
 export interface SalaryAnalysisTO {
+  idSalaryAnalysis?: number;
   employee: EmployeeTO;
+  benchmark: BenchmarkTO;
+  recordedSalary: number;
   marketAverage: number;
-  differencePercentage: number;
   risk: RiskClassification;
-  recommendation: string;
+  analysisDate?: string;
 }
 
-// Tipo Estendido para o Frontend (para o Dashboard Visual)
-export interface SalaryAnalysisEnhanced extends SalaryAnalysisTO {
+export interface SalaryAnalysisEnhanced
+  extends Omit<SalaryAnalysisTO, "idSalaryAnalysis"> {
+  idSalaryAnalysis?: number;
+  differencePercentage: number;
+  recommendation: string;
   compaRatio: number;
   percentile: string;
   replacementCost: number;
@@ -49,28 +59,29 @@ export interface SalaryAnalysisEnhanced extends SalaryAnalysisTO {
   lastIncreaseMonths: number;
 }
 
-
-// Enums
-export type Level = "JUNIOR" | "PLENO" | "SENIOR" | "SPECIALIST" | "MANAGER" | "DIRECTOR" | "VP" | "C_LEVEL";
+// Enum de Risco (br.com.fiap.enums.RiskClassification)
 // export type RiskClassification = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
 
+// // DTO de Cargo
 // export interface RoleTO {
 //   idRole: number;
 //   name: string;
 //   level: Level;
 // }
 
+// // DTO de Colaborador
 // export interface EmployeeTO {
 //   idEmployee: number;
 //   fullName: string;
-//   birthDate: string;
+//   birthDate: string; // Formato YYYY-MM-DD
 //   salary: number;
 //   department: string;
 //   educationLevel: string;
-//   hireDate: string;
-//   role: RoleTO;
+//   hireDate: string; // Formato YYYY-MM-DD
+//   role: RoleTO;     // Objeto aninhado obrigatório
 // }
 
+// // DTO de Benchmark (Dados de Mercado)
 // export interface BenchmarkTO {
 //   idBenchmark?: number;
 //   roleName: string;
@@ -80,23 +91,21 @@ export type Level = "JUNIOR" | "PLENO" | "SENIOR" | "SPECIALIST" | "MANAGER" | "
 //   averageSalary: number;
 // }
 
-// // O DTO INTELIGENTE QUE VEM DO BACKEND
+// // DTO de Análise Salarial
 // export interface SalaryAnalysisTO {
 //   employee: EmployeeTO;
 //   marketAverage: number;
-  
-//   // Dados Processados pelo Java
-//   compaRatio: number;          // Ex: 0.85
-//   differencePercentage: number; 
-//   percentile: string;          // "Abaixo da Média"
-//   replacementCost: number;     // R$ 45.000,00
-//   suggestedRaise: number;      // R$ 1.500,00
-  
-//   // Dados Simulados/Inferidos pelo Java
-//   performanceRating: "Baixo" | "Médio" | "Alto" | "Top Performer";
-//   monthsSinceLastIncrease: number;
-
-//   // Decisão de Negócio do Java
+//   differencePercentage: number;
 //   risk: RiskClassification;
 //   recommendation: string;
+// }
+
+// // Tipo Estendido para o Frontend (para o Dashboard Visual)
+// export interface SalaryAnalysisEnhanced extends SalaryAnalysisTO {
+//   compaRatio: number;
+//   percentile: string;
+//   replacementCost: number;
+//   suggestedRaise: number;
+//   performanceRating: "Baixo" | "Médio" | "Alto" | "Top Performer";
+//   lastIncreaseMonths: number;
 // }

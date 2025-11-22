@@ -1,64 +1,91 @@
-import { EmployeeTO, SalaryAnalysisEnhanced } from "../types";
+import { EmployeeTO, SalaryAnalysisEnhanced, SalaryAnalysisTO } from "../types";
 import { BenchmarkService } from "./BenchmarkService";
+import { apiRequest } from "./services";
 
 export const SalaryAnalysisService = {
   analyzeEnhanced: async (
     employee: EmployeeTO
   ): Promise<SalaryAnalysisEnhanced> => {
-    // 1. Busca o Benchmark (Seja do Java ou do Mock Local)
     const benchmarks = await BenchmarkService.getAll();
+
     const match = benchmarks.find(
       (b) =>
-        b.roleName.toLowerCase() === employee.role.name.toLowerCase() &&
-        b.level === employee.role.level
+        b.role.name.toLowerCase() === employee.role.name.toLowerCase() &&
+        b.role.level === employee.role.level
     );
 
-    // Define média de mercado
     const marketAvg = match ? match.averageSalary : employee.salary;
 
-    // 2. Simulação de Dados que faltam no Backend (Performance e Histórico)
-    // Usamos o ID para gerar sempre o mesmo dado "aleatório" (determinístico)
     const performances = ["Médio", "Alto", "Top Performer", "Médio"];
     const performanceRating = performances[
       (employee.idEmployee ?? 1) % performances.length
     ] as any;
-    const lastIncreaseMonths = (employee.idEmployee ?? 1) * 4 + 2; // Gera ex: 6, 10, 14 meses
+    const lastIncreaseMonths = (employee.idEmployee ?? 1) * 4 + 2;
 
-    // 3. Cálculos Matemáticos (Lógica de Negócio no Front)
     const compaRatio = employee.salary / marketAvg;
-    const replacementCost = employee.salary * 4.5; // Custo estimado de demissão + contratação + treino
+    const safeCompaRatio = match ? compaRatio : 1.0;
+    const replacementCost = employee.salary * 4.5;
 
     let suggestedRaise = 0;
     let risk = "LOW";
     let recommendation = "Salário alinhado.";
 
-    // Recalcula risco com base na Performance (que o Java desconhece)
-    if (performanceRating === "Top Performer" && compaRatio < 0.9) {
+    if (!match) {
+      recommendation = "Sem dados de mercado para comparação.";
+    } else if (performanceRating === "Top Performer" && safeCompaRatio < 0.9) {
       risk = "CRITICAL";
       recommendation =
         "Risco Crítico: Top Talent ganhando pouco. Ajustar urgente.";
       suggestedRaise = marketAvg * 1.1 - employee.salary;
-    } else if (compaRatio < 0.85) {
+    } else if (safeCompaRatio < 0.85) {
       risk = "HIGH";
       recommendation = "Defasagem severa em relação ao mercado.";
       suggestedRaise = marketAvg - employee.salary;
     }
 
-    // 4. Monta o Objeto Final
     return {
       employee,
+      benchmark: match || {
+        floorSalary: 0,
+        averageSalary: employee.salary,
+        ceilingSalary: 0,
+        role: employee.role,
+      },
+      recordedSalary: employee.salary,
       marketAverage: marketAvg,
-      differencePercentage: ((employee.salary - marketAvg) / marketAvg) * 100,
+      differencePercentage: match
+        ? ((employee.salary - marketAvg) / marketAvg) * 100
+        : 0,
       risk: risk as any,
       recommendation,
-
-      // Novos campos
-      compaRatio,
-      percentile: compaRatio > 1.05 ? "Acima da Média" : "Abaixo da Média",
+      compaRatio: safeCompaRatio,
+      percentile: safeCompaRatio > 1.05 ? "Acima da Média" : "Abaixo da Média",
       replacementCost,
       suggestedRaise: Math.max(0, suggestedRaise),
       performanceRating,
       lastIncreaseMonths,
     };
+  },
+
+  create: async (
+    analysis: SalaryAnalysisEnhanced
+  ): Promise<SalaryAnalysisTO> => {
+    if (!analysis.benchmark || !analysis.benchmark.idBenchmark) {
+      throw new Error(
+        "Não é possível salvar a análise sem um Benchmark de mercado correspondente."
+      );
+    }
+
+    const payload: SalaryAnalysisTO = {
+      employee: analysis.employee,
+      benchmark: analysis.benchmark,
+      recordedSalary: analysis.recordedSalary,
+      marketAverage: analysis.marketAverage,
+      risk: analysis.risk,
+      analysisDate:
+        analysis.analysisDate || new Date().toISOString().split("T")[0],
+    };
+
+    return await apiRequest<SalaryAnalysisTO>("/analysis", "POST", payload);
   },
 };
