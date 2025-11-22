@@ -10,8 +10,8 @@ export const SalaryAnalysisService = {
 
     const match = benchmarks.find(
       (b) =>
-        b.role.name.toLowerCase() === employee.role.name.toLowerCase() &&
-        b.role.level === employee.role.level
+        b.roleName.toLowerCase() === employee.role.name.toLowerCase() &&
+        b.level === employee.role.level
     );
 
     const marketAvg = match ? match.averageSalary : employee.salary;
@@ -46,10 +46,11 @@ export const SalaryAnalysisService = {
     return {
       employee,
       benchmark: match || {
-        floorSalary: 0,
+        roleName: employee.role.name,
+        level: employee.role.level,
+        region: "N/A",
+        companySize: "N/A",
         averageSalary: employee.salary,
-        ceilingSalary: 0,
-        role: employee.role,
       },
       recordedSalary: employee.salary,
       marketAverage: marketAvg,
@@ -84,6 +85,8 @@ export const SalaryAnalysisService = {
       risk: analysis.risk,
       analysisDate:
         analysis.analysisDate || new Date().toISOString().split("T")[0],
+      differencePercentage: analysis.differencePercentage,
+      recommendation: analysis.recommendation,
     };
 
     return await apiRequest<SalaryAnalysisTO>("/analysis", "POST", payload);
