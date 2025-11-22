@@ -29,11 +29,11 @@ export interface EmployeeTO {
 }
 export interface BenchmarkTO {
   idBenchmark?: number;
-  roleName: string;
-  level: Level;
-  region: string;
-  companySize: string;
+  role: RoleTO;
   averageSalary: number;
+  floorSalary: number;
+  ceilingSalary: number;
+  referenceDate?: string;
 }
 
 export interface SalaryAnalysisTO {

@@ -10,8 +10,8 @@ export const SalaryAnalysisService = {
 
     const match = benchmarks.find(
       (b) =>
-        b.roleName.toLowerCase() === employee.role.name.toLowerCase() &&
-        b.level === employee.role.level
+        b.role.name.toLowerCase() === employee.role.name.toLowerCase() &&
+        b.role.level === employee.role.level
     );
 
     const marketAvg = match ? match.averageSalary : employee.salary;
@@ -46,11 +46,10 @@ export const SalaryAnalysisService = {
     return {
       employee,
       benchmark: match || {
-        roleName: employee.role.name,
-        level: employee.role.level,
-        region: "N/A",
-        companySize: "N/A",
+        role: employee.role,
         averageSalary: employee.salary,
+        floorSalary: employee.salary,
+        ceilingSalary: employee.salary,
       },
       recordedSalary: employee.salary,
       marketAverage: marketAvg,
