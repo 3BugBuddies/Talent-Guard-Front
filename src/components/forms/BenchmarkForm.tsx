@@ -1,17 +1,21 @@
 import { useState } from "react";
 import { BenchmarkService } from "../../services/BenchmarkService";
-import { BenchmarkTO } from "../../types";
+import { BenchmarkTO, Level } from "../../types";
 import { COMMON_ROLES, LEVELS } from "../../constants";
+
 interface BenchmarkFormProps {
   onSuccess: () => void;
 }
+interface BenchmarkFormData {
+  roleName: string;
+  level: Level;
+  averageSalary: number;
+}
 
 export default function BenchmarkForm({ onSuccess }: BenchmarkFormProps) {
-  const [formData, setFormData] = useState<Omit<BenchmarkTO, "idBenchmark">>({
+  const [formData, setFormData] = useState<BenchmarkFormData>({
     roleName: "",
     level: "JUNIOR",
-    region: "",
-    companySize: "Grande Porte", // Default
     averageSalary: 0,
   });
 
@@ -28,21 +32,32 @@ export default function BenchmarkForm({ onSuccess }: BenchmarkFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await BenchmarkService.create(formData);
+      const payload: BenchmarkTO = {
+        role: {
+          name: formData.roleName,
+          level: formData.level,
+        },
+        averageSalary: formData.averageSalary,
+        floorSalary: formData.averageSalary * 0.8,
+        ceilingSalary: formData.averageSalary * 1.2,
+      };
+
+      await BenchmarkService.create(payload);
+
       alert("Benchmark de mercado criado com sucesso!");
 
       setFormData({
         roleName: "",
         level: "JUNIOR",
-        region: "",
-        companySize: "Grande Porte",
         averageSalary: 0,
       });
 
       onSuccess();
     } catch (error) {
       console.error("Erro ao criar benchmark:", error);
-      alert("Erro ao salvar dados de mercado.");
+      alert(
+        "Erro ao salvar dados de mercado. Verifique se o backend está rodando."
+      );
     }
   };
 
@@ -95,41 +110,6 @@ export default function BenchmarkForm({ onSuccess }: BenchmarkFormProps) {
             </select>
           </div>
 
-          {/* Região */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Região (Ex: SP, Nacional)
-            </label>
-            <input
-              type="text"
-              name="region"
-              value={formData.region}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-              placeholder="Ex: São Paulo"
-              required
-            />
-          </div>
-
-          {/* Porte da Empresa */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Porte da Empresa
-            </label>
-            <select
-              name="companySize"
-              value={formData.companySize}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none bg-white"
-            >
-              <option value="Startup">Startup</option>
-              <option value="Pequena">Pequena</option>
-              <option value="Média">Média</option>
-              <option value="Grande Porte">Grande Porte</option>
-              <option value="Multinacional">Multinacional</option>
-            </select>
-          </div>
-
           {/* Média Salarial */}
           <div className="col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -144,6 +124,9 @@ export default function BenchmarkForm({ onSuccess }: BenchmarkFormProps) {
               className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
               required
             />
+            <p className="text-xs text-gray-400 mt-1">
+              * Mínimo e Máximo serão calculados automaticamente (+/- 20%)
+            </p>
           </div>
         </div>
 
