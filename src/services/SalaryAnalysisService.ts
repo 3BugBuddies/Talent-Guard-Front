@@ -46,10 +46,10 @@ export const SalaryAnalysisService = {
     return {
       employee,
       benchmark: match || {
-        floorSalary: 0,
-        averageSalary: employee.salary,
-        ceilingSalary: 0,
         role: employee.role,
+        averageSalary: employee.salary,
+        floorSalary: employee.salary,
+        ceilingSalary: employee.salary,
       },
       recordedSalary: employee.salary,
       marketAverage: marketAvg,
@@ -84,6 +84,8 @@ export const SalaryAnalysisService = {
       risk: analysis.risk,
       analysisDate:
         analysis.analysisDate || new Date().toISOString().split("T")[0],
+      differencePercentage: analysis.differencePercentage,
+      recommendation: analysis.recommendation,
     };
 
     return await apiRequest<SalaryAnalysisTO>("/analysis", "POST", payload);

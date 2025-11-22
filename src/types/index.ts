@@ -29,11 +29,11 @@ export interface EmployeeTO {
 }
 export interface BenchmarkTO {
   idBenchmark?: number;
-  floorSalary: number;
-  averageSalary: number;
-  ceilingSalary: number;
-  referenceDate?: string; // YYYY-MM-DD
   role: RoleTO;
+  averageSalary: number;
+  floorSalary: number;
+  ceilingSalary: number;
+  referenceDate?: string;
 }
 
 export interface SalaryAnalysisTO {
@@ -44,6 +44,8 @@ export interface SalaryAnalysisTO {
   marketAverage: number;
   risk: RiskClassification;
   analysisDate?: string;
+  differencePercentage: number;
+  recommendation: string;
 }
 
 export interface SalaryAnalysisEnhanced
