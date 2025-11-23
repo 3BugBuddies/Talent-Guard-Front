@@ -31,7 +31,7 @@ export default function Header() {
             <div className="flex-shrink-0">
               <Link to="/" className="block">
                 <img
-                  src="public/img/logo-transp-3.png"
+                  src="/img/logo-transp-3.png"
                   alt="Talent Guard Logo"
                   className="h-20 w-auto"
                 />
