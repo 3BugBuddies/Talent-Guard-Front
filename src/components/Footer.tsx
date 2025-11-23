@@ -18,7 +18,7 @@ export default function Footer() {
       <div className="flex justify-center md:justify-start mb-4 md:mb-0">
         <Link to="/">
           <img
-            src="public/img/logo-transp-2.png"
+            src="/img/logo-transp-2.png"
             alt="Talent Guard Logo"
             className="w-24 h-auto"
           />
