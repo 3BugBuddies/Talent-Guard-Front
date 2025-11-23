@@ -2,11 +2,7 @@ export type Level =
   | "JUNIOR"
   | "PLENO"
   | "SENIOR"
-  | "SPECIALIST"
-  | "MANAGER"
-  | "DIRECTOR"
-  | "VP"
-  | "C_LEVEL";
+;
 
 export type RiskClassification = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
 

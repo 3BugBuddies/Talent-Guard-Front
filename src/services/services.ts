@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_BASE_URL as string; 
+const BASE_URL = "https://talent-guard-api.onrender.com"; 
 
 /**
  * Função genérica realiza requisições HTTP à API Talent Guard.
