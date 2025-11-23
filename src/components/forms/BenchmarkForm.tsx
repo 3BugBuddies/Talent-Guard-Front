@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { BenchmarkService } from "../../services/BenchmarkService";
 import { RoleService } from "../../services/RoleService";
 import { BenchmarkTO, Level, RoleTO } from "../../types";
+import { Loader2 } from "lucide-react";
 
 interface BenchmarkFormProps {
   onSuccess: () => void;
@@ -14,6 +15,8 @@ interface BenchmarkFormData {
 export default function BenchmarkForm({ onSuccess }: BenchmarkFormProps) {
   const [availableRoles, setAvailableRoles] = useState<RoleTO[]>([]);
   const [isLoadingRoles, setIsLoadingRoles] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [formData, setFormData] = useState<BenchmarkFormData>({
     idRole: 0,
     averageSalary: 0,
@@ -26,6 +29,9 @@ export default function BenchmarkForm({ onSuccess }: BenchmarkFormProps) {
       try {
         const roles = await RoleService.getAll();
         setAvailableRoles(roles);
+        if (roles.length > 0) {
+          setFormData(prev => ({ ...prev, idRole: roles[0].idRole ?? 0 }));
+        }
       } catch (error) {
         console.error("Erro ao carregar cargos:", error);
         alert("Erro ao carregar cargos. Verifique se o backend está rodando.");
@@ -49,19 +55,27 @@ export default function BenchmarkForm({ onSuccess }: BenchmarkFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     if (!formData.idRole) {
       alert("Por favor, selecione um cargo.");
+      setIsSubmitting(false);
       return;
     }
 
     const selectedRole = availableRoles.find(r => r.idRole === formData.idRole);
+    if (!selectedRole) {
+      alert("Cargo selecionado é inválido.");
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       const payload: BenchmarkTO = {
         role: {
           idRole: formData.idRole,
-          name: selectedRole ? selectedRole.name : "",
-          level: selectedRole ? selectedRole.level as Level : "JUNIOR",
+          name: selectedRole.name,
+          level: selectedRole.level as Level,
         },
         averageSalary: formData.averageSalary,
         floorSalary: formData.averageSalary * 0.8,
@@ -73,7 +87,7 @@ export default function BenchmarkForm({ onSuccess }: BenchmarkFormProps) {
       alert("Benchmark de mercado criado com sucesso!");
 
       setFormData({
-        idRole: 0,
+        idRole: selectedRole.idRole ?? 0,
         averageSalary: 0,
       });
 
@@ -83,40 +97,45 @@ export default function BenchmarkForm({ onSuccess }: BenchmarkFormProps) {
       alert(
         "Erro ao salvar dados de mercado. Verifique se o backend está rodando."
       );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow border border-gray-100">
-      <h2 className="text-xl font-bold text-gray-800 mb-4">
+    <div className="bg-white dark:bg-dark-surface p-6 rounded-lg shadow border border-gray-100 dark:border-dark-border">
+      <h2 className="text-xl font-bold text-gray-800 dark:text-dark-text-primary mb-4">
         Cadastrar Novo Benchmark de Mercado
       </h2>
+
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* INPUT UNIFICADO: Cargo + Nível */}
-          <div className="col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+        <div className="grid grid-cols-1 gap-4">
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Cargo & Nível
             </label>
             <select
               name="idRole"
               value={formData.idRole}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+              className="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 
+                         focus:ring-2 focus:ring-green-500 outline-none 
+                         bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
               required
-              disabled={isLoadingRoles}
+              disabled={isLoadingRoles || isSubmitting}
             >
               <option value={0} disabled>
                 {isLoadingRoles ? "Carregando cargos..." : "Selecione o Cargo..."}
               </option>
-              
+
               {availableRoles.map((role) => (
                 <option key={role.idRole} value={role.idRole}>
-                  {/* Exibe Cargo + Nível juntos */}
                   {role.name} - {role.level}
                 </option>
               ))}
             </select>
+
             {availableRoles.length === 0 && !isLoadingRoles && (
               <p className="text-xs text-red-500 mt-1">
                 Nenhum cargo encontrado. Cadastre cargos na aba "Cargos" primeiro.
@@ -124,9 +143,8 @@ export default function BenchmarkForm({ onSuccess }: BenchmarkFormProps) {
             )}
           </div>
 
-          {/* Média Salarial */}
-          <div className="col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Média Salarial de Mercado (R$)
             </label>
             <input
@@ -135,10 +153,14 @@ export default function BenchmarkForm({ onSuccess }: BenchmarkFormProps) {
               value={formData.averageSalary}
               onChange={handleChange}
               step="0.01"
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+              min="0"
+              className="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 
+                         focus:ring-2 focus:ring-green-500 outline-none 
+                         bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
               required
+              disabled={isSubmitting}
             />
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="text-xs text-gray-400 mt-1 dark:text-gray-500">
               * Mínimo e Máximo serão calculados automaticamente (+/- 20%)
             </p>
           </div>
@@ -146,9 +168,19 @@ export default function BenchmarkForm({ onSuccess }: BenchmarkFormProps) {
 
         <button
           type="submit"
-          className="w-full bg-gray-800 text-white py-2 px-4 rounded-md hover:bg-gray-900 transition-colors font-medium mt-4"
+          disabled={isSubmitting || isLoadingRoles}
+          className={`w-full bg-green-600 text-white py-2 px-4 rounded-md 
+                      hover:bg-green-700 transition-colors font-medium mt-4 
+                      ${isSubmitting ? "opacity-75 cursor-not-allowed" : "shadow-md dark:shadow-green-900/50"}`}
         >
-          Salvar Benchmark
+          {isSubmitting ? (
+            <span className="flex items-center justify-center">
+              <Loader2 size={18} className="animate-spin mr-2" />
+              Salvando...
+            </span>
+          ) : (
+            "Salvar Benchmark"
+          )}
         </button>
       </form>
     </div>

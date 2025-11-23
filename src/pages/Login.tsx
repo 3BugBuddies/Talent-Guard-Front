@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Container from "../components/ui/Container";
 import Button from "../components/ui/Button";
+import ThemeToggle from "../components/ui/ThemeToggle";
 
 interface UserData {
   id: number;
@@ -110,16 +111,26 @@ export default function Login() {
   }, []);
 
   return (
-    <Container className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-2xl w-full max-w-md">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-extrabold text-gray-800">
-            Acesso ao Sistema
-          </h2>
-          <p className="text-gray-500 mt-2">Selecione seu perfil de acesso</p>
+    <Container className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-dark-bg transition-colors duration-300">
+
+      <div className="bg-white dark:bg-dark-surface p-8 rounded-lg shadow-2xl w-full max-w-md border border-gray-100 dark:border-dark-border relative">
+
+        <div className="absolute top-4 right-4">
+          <ThemeToggle />
         </div>
 
-        <div className="flex rounded-md bg-gray-200 p-1 mb-6">
+        <div className="text-center mb-8">
+          {/* Título */}
+          <h2 className="text-3xl font-extrabold text-gray-800 dark:text-dark-text-primary">
+            Acesso ao Sistema
+          </h2>
+          {/* Subtítulo */}
+          <p className="text-gray-500 dark:text-dark-text-secondary mt-2">
+            Selecione seu perfil de acesso
+          </p>
+        </div>
+
+        <div className="flex rounded-md bg-gray-200 dark:bg-gray-800 p-1 mb-6">
           <button
             type="button"
             onClick={() => {
@@ -128,11 +139,10 @@ export default function Login() {
               setEmail("");
               setPassword("");
             }}
-            className={`flex-1 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
-              selectedRole === "ADMIN"
-                ? "bg-white text-blue-700 shadow-sm"
-                : "text-gray-500 hover:text-gray-700"
-            }`}
+            className={`flex-1 py-2 text-sm font-medium rounded-md transition-all duration-200 ${selectedRole === "ADMIN"
+                ? "bg-white dark:bg-gray-900 text-blue-700 dark:text-blue-400 shadow-sm"
+                : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white"
+              }`}
           >
             Administrador
           </button>
@@ -144,27 +154,27 @@ export default function Login() {
               setEmail("");
               setPassword("");
             }}
-            className={`flex-1 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
-              selectedRole === "RH_USER"
-                ? "bg-white text-purple-700 shadow-sm"
-                : "text-gray-500 hover:text-gray-700"
-            }`}
+            className={`flex-1 py-2 text-sm font-medium rounded-md transition-all duration-200 ${selectedRole === "RH_USER"
+                ? "bg-white dark:bg-gray-900 text-purple-700 dark:text-purple-400 shadow-sm"
+                : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white"
+              }`}
           >
             Recursos Humanos
           </button>
         </div>
 
         {error && (
-          <div className="mb-4 p-3 bg-red-50 border-l-4 border-red-500 text-red-700 text-sm">
+          <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border-l-4 border-red-500 dark:border-red-600 text-red-700 dark:text-red-300 text-sm">
             <p>{error}</p>
           </div>
         )}
 
         <form onSubmit={handleLogin} className="space-y-6">
+          {/* Campo E-mail */}
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
             >
               E-mail Corporativo
             </label>
@@ -174,17 +184,18 @@ export default function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
               placeholder={
                 selectedRole === "ADMIN" ? "admin@global.com" : "rh@global.com"
               }
             />
           </div>
 
+          {/* Campo Senha */}
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
             >
               Senha
             </label>
@@ -194,7 +205,7 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
               placeholder="••••••"
             />
           </div>
@@ -202,11 +213,11 @@ export default function Login() {
           <Button
             type="submit"
             disabled={loading}
-            className={`w-full py-3 px-4 rounded-md shadow-md text-white text-lg font-semibold transition-all transform hover:-translate-y-0.5 ${
-              selectedRole === "ADMIN"
+            className={`w-full py-3 px-4 rounded-md shadow-md text-white text-lg font-semibold transition-all transform hover:-translate-y-0.5 
+            ${selectedRole === "ADMIN"
                 ? "bg-blue-600 hover:bg-blue-700 focus:ring-blue-500"
                 : "bg-purple-600 hover:bg-purple-700 focus:ring-purple-500"
-            } focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed`}
+              } focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-dark-surface disabled:opacity-50 disabled:cursor-not-allowed`}
           >
             {loading
               ? "Autenticando..."
@@ -214,13 +225,13 @@ export default function Login() {
           </Button>
         </form>
 
-        <div className="mt-6 pt-6 border-t border-gray-200">
-          <p className="text-xs text-center text-gray-400 uppercase tracking-wide mb-2">
+        <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+          <p className="text-xs text-center text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-2">
             Dados para Teste (Mock)
           </p>
           <div
             onClick={fillCredentials}
-            className="bg-gray-50 p-3 rounded border border-gray-200 text-xs text-gray-600 cursor-pointer hover:bg-gray-100 transition-colors text-center"
+            className="bg-gray-50 dark:bg-gray-800 p-3 rounded border border-gray-200 dark:border-gray-700 text-xs text-gray-600 dark:text-gray-300 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-center"
             title="Clique para preencher automaticamente"
           >
             <p className="font-mono">

@@ -5,7 +5,6 @@ import DeleteConfirmationModal from "../modals/DeleteConfirmationModal";
 import { EmployeeTO } from "../../types";
 import { EmployeeService } from "../../services/EmployeeService";
 
-// Interface estendida apenas para controle visual de Risco
 interface EmployeeUI extends EmployeeTO {
   retentionRisk: "Baixo" | "Médio" | "Alto";
 }
@@ -32,8 +31,6 @@ export default function CollaboratorsList() {
     try {
       setLoading(true);
       const data = await EmployeeService.getAll();
-
-      // Mapeia para adicionar o campo visual 'retentionRisk' (simulado por enquanto)
       const uiData: EmployeeUI[] = data.map(emp => ({
         ...emp,
         retentionRisk: calculateRiskMock(emp)
@@ -132,7 +129,6 @@ export default function CollaboratorsList() {
 
   const formatDate = (dateString: string) => {
     if (!dateString) return "-";
-    // Tenta tratar datas no formato array [2023, 5, 20] que o Java, ou string ISO
     if (Array.isArray(dateString)) {
       const [year, month, day] = dateString;
       return new Date(year, month - 1, day).toLocaleDateString("pt-BR");
@@ -141,11 +137,13 @@ export default function CollaboratorsList() {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow overflow-hidden border border-gray-100">
-      <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
+    <div className="bg-white dark:bg-dark-surface rounded-lg shadow dark:shadow-none overflow-hidden border border-gray-100 dark:border-dark-border">
+      <div className="px-6 py-4 border-b border-gray-200 dark:border-dark-border flex justify-between items-center bg-gray-50 dark:bg-dark-surface-hover">
         <div>
-          <h3 className="text-lg font-semibold text-gray-800">Quadro de Colaboradores</h3>
-          <p className="text-sm text-gray-500">Gerencie os dados e acompanhe métricas</p>
+          {/* Título */}
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-dark-text-primary">Quadro de Colaboradores</h3>
+          {/* Subtítulo */}
+          <p className="text-sm text-gray-500 dark:text-dark-text-secondary">Gerencie os dados e acompanhe métricas</p>
         </div>
         <button
           className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors shadow-sm"
@@ -159,61 +157,73 @@ export default function CollaboratorsList() {
         <div className="p-10 text-center text-gray-500">Carregando colaboradores...</div>
       ) : (
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <thead className="bg-gray-50 dark:bg-dark-surface-hover">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Colaborador</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Cargo / Nível</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Departamento</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Admissão</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Salário</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Risco Retenção</th>
-                <th className="px-6 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Ações</th>
+                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Colaborador</th>
+                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Cargo / Nível</th>
+                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Departamento</th>
+                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Admissão</th>
+                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Salário</th>
+                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Risco Retenção</th>
+                <th className="px-6 py-3 text-right text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Ações</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+
+            <tbody className="bg-white dark:bg-dark-surface divide-y divide-gray-200 dark:divide-gray-700">
               {employees.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="px-6 py-10 text-center text-gray-400">
+                  <td colSpan={7} className="px-6 py-10 text-center text-gray-400 dark:text-gray-500">
                     Nenhum colaborador encontrado. Adicione o primeiro!
                   </td>
                 </tr>
               )}
+
+
               {employees.map((emp) => (
-                <tr key={emp.idEmployee} className="hover:bg-blue-50 transition-colors group">
+                <tr key={emp.idEmployee} className="hover:bg-blue-50 dark:hover:bg-dark-surface-hover transition-colors group">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
-                      <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-sm">
+                      <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-600 dark:text-blue-200 font-bold text-sm">
                         {emp.fullName.charAt(0)}
                       </div>
                       <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">{emp.fullName}</div>
+                        <div className="text-sm font-medium text-gray-900 dark:text-dark-text-primary">{emp.fullName}</div>
                       </div>
                     </div>
                   </td>
+
                   <td className="px-6 py-4 whitespace-nowrap">
-                    {/* Proteção contra role undefined */}
-                    <div className="text-sm text-gray-900">{emp.role?.name || "Sem Cargo"}</div>
-                    <div className="text-xs text-gray-500 bg-gray-100 inline-block px-2 py-0.5 rounded mt-1">
+                    <div className="text-sm text-gray-900 dark:text-dark-text-primary">{emp.role?.name || "Sem Cargo"}</div>
+                    <div className="text-xs text-gray-500 bg-gray-100 dark:text-gray-400 dark:bg-dark-surface-hover inline-block px-2 py-0.5 rounded mt-1 border dark:border-gray-700">
                       {emp.role?.level || "-"}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{emp.department}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatDate(emp.hireDate)}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">{formatCurrency(emp.salary)}</td>
+
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-dark-text-secondary">{emp.department}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-dark-text-secondary">{formatDate(emp.hireDate)}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-dark-text-secondary font-mono">{formatCurrency(emp.salary)}</td>
+
+                  {/* Risco de Retenção (Badges) */}
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full border 
-                      ${emp.retentionRisk === "Alto" ? "bg-red-50 text-red-700 border-red-200" :
-                        emp.retentionRisk === "Médio" ? "bg-yellow-50 text-yellow-700 border-yellow-200" :
-                          "bg-green-50 text-green-700 border-green-200"}`}>
+                    ${emp.retentionRisk === "Alto"
+                        ? "bg-red-50 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800" :
+                        emp.retentionRisk === "Médio"
+                          ? "bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-400 dark:border-yellow-800" :
+                          "bg-green-50 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800"}`}>
                       {emp.retentionRisk}
                     </span>
                   </td>
+
+                  {/* Ações (Botões) */}
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button className="text-gray-400 hover:text-blue-600 transition-colors mr-4" onClick={() => handleEditClick(emp)}>
+                    {/* Editar */}
+                    <button className="text-gray-400 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors mr-4" onClick={() => handleEditClick(emp)}>
                       Editar
                     </button>
-                    <button className="text-red-500 hover:text-red-700 transition-colors font-medium" onClick={() => handleDeleteClick(emp)}>
+                    {/* Remover */}
+                    <button className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors font-medium" onClick={() => handleDeleteClick(emp)}>
                       Remover
                     </button>
                   </td>

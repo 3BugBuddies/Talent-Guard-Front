@@ -3,6 +3,7 @@ import { RoleTO } from "../../types";
 import { RoleService } from "../../services/RoleService";
 import DeleteConfirmationModal from "../../components/modals/DeleteConfirmationModal";
 import RoleModal from "../../components/modals/RoleModal";
+import { Plus } from "lucide-react";
 
 export default function AdminRoles() {
   const [roles, setRoles] = useState<RoleTO[]>([]);
@@ -81,14 +82,14 @@ export default function AdminRoles() {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow overflow-hidden border border-gray-100">
-      {/* Header com Ação Principal */}
-      <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
+    <div className="bg-white dark:bg-dark-surface rounded-lg shadow overflow-hidden border border-gray-100 dark:border-dark-border">
+      
+      <div className="px-6 py-4 border-b border-gray-200 dark:border-dark-border flex justify-between items-center bg-gray-50 dark:bg-dark-surface-hover">
         <div>
-          <h3 className="text-lg font-semibold text-gray-800">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-dark-text-primary">
             Gestão de Cargos e Níveis
           </h3>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-dark-text-secondary">
             Cadastre e padronize os cargos da organização
           </p>
         </div>
@@ -96,73 +97,93 @@ export default function AdminRoles() {
           onClick={handleAddClick}
           className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors shadow-sm flex items-center gap-2"
         >
-          <span className="text-xl leading-none pb-1">+</span> Novo Cargo
+          <Plus size={18} /> Novo Cargo
         </button>
       </div>
 
-      {/* Tabela de Listagem */}
+      {/* 3. Tabela de Listagem: Responsividade e adaptação de divisores. */}
       <div className="overflow-x-auto">
         {loading ? (
-          <div className="p-8 text-center text-gray-500">
+          <div className="p-8 text-center text-gray-500 dark:text-gray-400">
             Carregando cargos...
           </div>
         ) : (
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            {/* Cabeçalho da Tabela */}
+            <thead className="bg-gray-50 dark:bg-dark-surface-hover">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                {/* Títulos das Colunas adaptados */}
+                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   ID
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Nome do Cargo
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Nível Hierárquico
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  Descrição
+                </th>
+                <th className="px-6 py-3 text-right text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Ações
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            
+            {/* Corpo da Tabela */}
+            <tbody className="bg-white dark:bg-dark-surface divide-y divide-gray-200 dark:divide-gray-700">
               {roles.map((role) => (
                 <tr
                   key={role.idRole}
-                  className="hover:bg-blue-50 transition-colors"
+                  className="hover:bg-blue-50 dark:hover:bg-dark-surface-hover transition-colors"
                 >
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">
+                  {/* ID */}
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-dark-text-secondary font-mono">
                     #{role.idRole}
                   </td>
+                  {/* Nome do Cargo */}
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">
+                    <div className="text-sm font-medium text-gray-900 dark:text-dark-text-primary">
                       {role.name}
                     </div>
                   </td>
+                  {/* Nível Hierárquico (Badge) */}
                   <td className="px-6 py-4 whitespace-nowrap">
-                    {/* Badge de Nível com cores baseadas na hierarquia */}
                     <span
                       className={`px-2.5 py-0.5 inline-flex text-xs leading-5 font-bold rounded-full
                       ${
+               
                         ["C_LEVEL", "VP", "DIRECTOR"].includes(role.level)
-                          ? "bg-purple-100 text-purple-800"
+                          ? "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400"
                           : ["MANAGER", "SPECIALIST"].includes(role.level)
-                          ? "bg-indigo-100 text-indigo-800"
-                          : "bg-blue-100 text-blue-800"
-                      }`}
+                          ? "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400"
+                          : "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
+                      }
+                      border border-transparent dark:border-current`} 
                     >
                       {role.level}
                     </span>
                   </td>
+                  {/* Descrição */}
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900 dark:text-dark-text-primary">
+                      {role.description}
+                    </div>
+                  </td>
+                  {/* Ações */}
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    {/* Botão Editar adaptado */}
                     <button
                       onClick={() => handleEditClick(role)}
-                      className="text-indigo-600 hover:text-indigo-900 mr-4 font-medium transition-colors"
+                      className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300 mr-4 font-medium transition-colors"
                     >
                       Editar
                     </button>
+                    {/* Botão Remover adaptado */}
                     <button
                       onClick={() => handleDeleteClick(role)}
-                      className="text-red-600 hover:text-red-900 font-medium transition-colors"
+                      className="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300 font-medium transition-colors"
                     >
                       Remover
                     </button>
