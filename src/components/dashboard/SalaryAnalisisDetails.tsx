@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { SalaryAnalysisService } from "../../services/SalaryAnalysisService";
 import { SalaryAnalysisEnhanced } from "../../types";
+import CreateAnalysisModal from "../modals/CreateAnalysisModal";
 
 export default function SalaryAnalysisDetails() {
   const [analyses, setAnalyses] = useState<SalaryAnalysisEnhanced[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     loadHistory();
@@ -21,7 +23,7 @@ export default function SalaryAnalysisDetails() {
       setLoading(false);
     }
   };
-
+const handleAddClick = () => setIsModalOpen(true);
   const handleDelete = async (id?: number) => {
     if (!id) return;
     if (!confirm("Tem certeza que deseja remover esta análise do histórico?"))
@@ -35,6 +37,8 @@ export default function SalaryAnalysisDetails() {
       alert("Erro ao excluir registro.");
     }
   };
+
+
 
   const formatMoney = (val: number) =>
     new Intl.NumberFormat("pt-BR", {
@@ -95,7 +99,12 @@ export default function SalaryAnalysisDetails() {
           </p>
         </div>
       </div>
-
+        <button
+          className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors shadow-sm"
+          onClick={handleAddClick}
+        >
+          + Adicionar Colaborador
+        </button>
       {/* Tabela de Histórico */}
       <div className="bg-white rounded-lg shadow overflow-hidden border border-gray-100">
         <div className="px-6 py-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
@@ -120,7 +129,7 @@ export default function SalaryAnalysisDetails() {
                   Salário Atual
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase">
-                  Risco
+                  Patamar
                 </th>
                 <th className="px-6 py-3 text-right text-xs font-bold text-gray-500 uppercase">
                   Ações
@@ -171,7 +180,18 @@ export default function SalaryAnalysisDetails() {
             </tbody>
           </table>
         </div>
+          <CreateAnalysisModal
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+              onSave={async (payload) => {
+                // adapt modal payload to the service call; use a cast to bypass stricter typings if needed
+                await SalaryAnalysisService.create(payload as unknown as any);
+                // reload the history and close the modal after successful save
+                await loadHistory();
+                setIsModalOpen(false);
+              }}
+            />
+        </div>
       </div>
-    </div>
-  );
+    );
 }
