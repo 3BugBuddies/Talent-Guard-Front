@@ -4,6 +4,7 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
@@ -31,6 +32,22 @@ export default {
           800: '#115e59',
           900: '#134e4a',
         },
+        // --- CORES ADICIONADAS PARA DARK MODE ---
+        // Fundo principal para o modo escuro (um cinza/azul profundo, melhor que preto puro)
+        'dark-bg': '#0f172a', // Slate 900
+        
+        // Superfícies: Cartões, Modais, Sidebars (um tom acima do fundo)
+        'dark-surface': '#1e293b', // Slate 800
+        'dark-surface-hover': '#334155', // Slate 700 (para hovers)
+        
+        // Bordas sutis para separar elementos no escuro
+        'dark-border': '#334155', // Slate 700
+        
+        // Textos para fundo escuro
+        'dark-text-primary': '#f8fafc', // Slate 50 (Branco suave)
+        'dark-text-secondary': '#cbd5e1', // Slate 300 (Cinza claro para subtítulos)
+        'dark-text-muted': '#64748b', // Slate 500 (Texto de apoio)
+        //
         accent: '#f3f4f6',
         success: '#10b981',
         warning: '#f59e0b',
