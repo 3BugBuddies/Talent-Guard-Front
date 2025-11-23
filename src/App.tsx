@@ -3,12 +3,13 @@ import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import PrivateRoute from "./components/PrivateRoute";
-
 import RHDashboard from "./pages/RHDashboard";
 import AdminBenchmarks from "./pages/admin/AdminBenchmarks";
 import AdminLayout from "./components/AdminLayout";
 import AdminHome from "./pages/admin/AdminHome";
 import AdminRoles from "./pages/admin/AdminRoles";
+import Contact from "./pages/Contact";
+import Team from "./pages/Team";
 
 function App() {
   return (

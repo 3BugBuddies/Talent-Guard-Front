@@ -1,6 +1,4 @@
-# Talent Guard Project
-
-# TalentGuard AI - Frontend (Web)
+# Talent Guard - Front 
 
 ![logo talent guard](https://github.com/user-attachments/assets/6d0ab99a-bdff-45c5-8136-b44713a563a3)
 
@@ -12,7 +10,7 @@
 
 ## 🚀 Visão Geral
 
-Este repositório contém o código-fonte do Frontend da aplicação **TalentGuard AI - Career Monitor**, desenvolvido para a **Global Solution 2025/2 - Software Engineering & Business Model**.
+Este repositório contém o código-fonte do Frontend da aplicação **TalentGuard**, desenvolvido para a **Global Solution 2025/2 - Software Engineering & Business Model**.
 
 O Frontend é a interface web que permite aos Gestores de RH visualizar e interagir com as análises de saúde de carreira dos colaboradores, incluindo o índice de risco de saída e o benchmark salarial, gerados por nossa Inteligência Artificial.
 
@@ -89,8 +87,6 @@ talent-guard-ai-frontend/
 
 Para acessar a área restrita da aplicação, utilize as seguintes credenciais:
 
-*   **Email:** `teste@email.com`
-*   **Senha:** `123456`
 
 ## Integrantes
 
@@ -100,10 +96,10 @@ Para acessar a área restrita da aplicação, utilize as seguintes credenciais:
 
 ## Repositório do Projeto no GitHub
 
-Você pode acessar o repositório do projeto no GitHub através do seguinte link:
+Você pode acessar o repositório do projeto no GitHub através do seguinte link: https://github.com/3BugBuddies/Talent-Guard-Front
 
 
-Link Vercel:
+Link Vercel: https://talent-guard-front.vercel.app/
 
 
 Link youtube: 
