@@ -42,7 +42,7 @@ export default function Card({
   
   const hoverEffect = hover ? 'transition-all duration-300 hover:transform hover:-translate-y-2 hover:shadow-xl' : ''
   
-  const classes = `bg-white ${paddings[padding]} ${shadows[shadow]} ${roundeds[rounded]} ${hoverEffect} ${className}`
+  const classes = `bg-white dark:bg-dark-surface border border-transparent dark:border-dark-border ${paddings[padding]} ${shadows[shadow]} ${roundeds[rounded]} ${hoverEffect} ${className}`
   
   return (
     <div className={classes}>

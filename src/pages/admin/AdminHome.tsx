@@ -13,7 +13,6 @@ export default function AdminHome() {
   useEffect(() => {
     async function loadStats() {
       try {
-        // Carrega contagens (usando length dos arrays)
         const [roles, benchmarks] = await Promise.all([
           RoleService.getAll(),
           BenchmarkService.getAll(),
@@ -35,10 +34,12 @@ export default function AdminHome() {
   return (
     <div className="space-y-8 animate-fadeIn">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">
+        {/* Título Principal */}
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-dark-text-primary">
           Painel Administrativo
         </h1>
-        <p className="mt-1 text-sm text-gray-500">
+        {/* Subtítulo */}
+        <p className="mt-1 text-sm text-gray-500 dark:text-dark-text-secondary">
           Bem-vindo ao centro de configuração do Talent Guard. Selecione um
           módulo abaixo.
         </p>
@@ -47,11 +48,10 @@ export default function AdminHome() {
       {/* Cards de Acesso Rápido */}
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {/* Card: Gestão de Cargos */}
-        <div className="bg-white overflow-hidden shadow rounded-lg hover:shadow-md transition-shadow border border-gray-100">
+        <div className="bg-white dark:bg-dark-surface overflow-hidden shadow rounded-lg hover:shadow-md transition-shadow border border-gray-100 dark:border-dark-border">
           <div className="p-5">
             <div className="flex items-center">
-              <div className="flex-shrink-0 bg-indigo-500 rounded-md p-3">
-                {/* Icone Cargo */}
+              <div className="flex-shrink-0 bg-indigo-600 rounded-md p-3 dark:bg-indigo-700">
                 <svg
                   className="h-6 w-6 text-white"
                   fill="none"
@@ -67,21 +67,24 @@ export default function AdminHome() {
                 </svg>
               </div>
               <div className="ml-5 w-0 flex-1">
-                <dt className="text-sm font-medium text-gray-500 truncate">
+                {/* Título da Métrica */}
+                <dt className="text-sm font-medium text-gray-500 dark:text-dark-text-secondary truncate">
                   Cargos Cadastrados
                 </dt>
                 <dd>
-                  <div className="text-2xl font-medium text-gray-900">
+                  {/* Valor da Métrica */}
+                  <div className="text-2xl font-medium text-gray-900 dark:text-dark-text-primary">
                     {stats.loading ? "..." : stats.rolesCount}
                   </div>
                 </dd>
               </div>
             </div>
           </div>
-          <div className="bg-gray-50 px-5 py-3">
+          {/* Área de Ação Rápida */}
+          <div className="bg-gray-50 dark:bg-dark-surface-hover px-5 py-3">
             <Link
               to="/admin/roles"
-              className="text-sm font-medium text-indigo-700 hover:text-indigo-900 flex items-center"
+              className="text-sm font-medium text-indigo-700 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300 flex items-center"
             >
               Gerenciar Cargos{" "}
               <span aria-hidden="true" className="ml-1">
@@ -92,11 +95,10 @@ export default function AdminHome() {
         </div>
 
         {/* Card: Benchmarks */}
-        <div className="bg-white overflow-hidden shadow rounded-lg hover:shadow-md transition-shadow border border-gray-100">
+        <div className="bg-white dark:bg-dark-surface overflow-hidden shadow rounded-lg hover:shadow-md transition-shadow border border-gray-100 dark:border-dark-border">
           <div className="p-5">
             <div className="flex items-center">
-              <div className="flex-shrink-0 bg-green-500 rounded-md p-3">
-                {/* Icone Gráfico */}
+              <div className="flex-shrink-0 bg-green-500 rounded-md p-3 dark:bg-green-600">
                 <svg
                   className="h-6 w-6 text-white"
                   fill="none"
@@ -112,21 +114,24 @@ export default function AdminHome() {
                 </svg>
               </div>
               <div className="ml-5 w-0 flex-1">
-                <dt className="text-sm font-medium text-gray-500 truncate">
+                {/* Título da Métrica */}
+                <dt className="text-sm font-medium text-gray-500 dark:text-dark-text-secondary truncate">
                   Dados de Mercado
                 </dt>
                 <dd>
-                  <div className="text-2xl font-medium text-gray-900">
+                  {/* Valor da Métrica */}
+                  <div className="text-2xl font-medium text-gray-900 dark:text-dark-text-primary">
                     {stats.loading ? "..." : stats.benchmarksCount}
                   </div>
                 </dd>
               </div>
             </div>
           </div>
-          <div className="bg-gray-50 px-5 py-3">
+          {/* Área de Ação Rápida */}
+          <div className="bg-gray-50 dark:bg-dark-surface-hover px-5 py-3">
             <Link
               to="/admin/benchmarks"
-              className="text-sm font-medium text-green-700 hover:text-green-900 flex items-center"
+              className="text-sm font-medium text-green-700 dark:text-green-400 hover:text-green-900 dark:hover:text-green-300 flex items-center"
             >
               Gerenciar Benchmarks{" "}
               <span aria-hidden="true" className="ml-1">
@@ -138,11 +143,11 @@ export default function AdminHome() {
       </div>
 
       {/* Seção de Instruções Rápidas */}
-      <div className="bg-white shadow sm:rounded-lg p-6 border border-gray-200">
-        <h3 className="text-lg leading-6 font-medium text-gray-900">
+      <div className="bg-white dark:bg-dark-surface shadow sm:rounded-lg p-6 border border-gray-200 dark:border-dark-border">
+        <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-dark-text-primary">
           Como usar o painel administrativo
         </h3>
-        <div className="mt-2 max-w-xl text-sm text-gray-500">
+        <div className="mt-2 max-w-xl text-sm text-gray-500 dark:text-dark-text-secondary">
           <p>Este painel centraliza as configurações vitais do Talent Guard.</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
             <li>
