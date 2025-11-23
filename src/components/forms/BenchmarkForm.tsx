@@ -1,23 +1,41 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BenchmarkService } from "../../services/BenchmarkService";
-import { BenchmarkTO, Level } from "../../types";
-import { COMMON_ROLES, LEVELS } from "../../constants";
+import { RoleService } from "../../services/RoleService";
+import { BenchmarkTO, Level, RoleTO } from "../../types";
 
 interface BenchmarkFormProps {
   onSuccess: () => void;
 }
 interface BenchmarkFormData {
-  roleName: string;
-  level: Level;
+  idRole: number;
   averageSalary: number;
 }
 
 export default function BenchmarkForm({ onSuccess }: BenchmarkFormProps) {
+  const [availableRoles, setAvailableRoles] = useState<RoleTO[]>([]);
+  const [isLoadingRoles, setIsLoadingRoles] = useState(false);
   const [formData, setFormData] = useState<BenchmarkFormData>({
-    roleName: "",
-    level: "JUNIOR",
+    idRole: 0,
     averageSalary: 0,
   });
+
+  useEffect(() => {
+    const fetchRoles = async () => {
+      setIsLoadingRoles(true);
+
+      try {
+        const roles = await RoleService.getAll();
+        setAvailableRoles(roles);
+      } catch (error) {
+        console.error("Erro ao carregar cargos:", error);
+        alert("Erro ao carregar cargos. Verifique se o backend está rodando.");
+      } finally {
+        setIsLoadingRoles(false);
+      }
+    };
+
+    fetchRoles();
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -25,17 +43,25 @@ export default function BenchmarkForm({ onSuccess }: BenchmarkFormProps) {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "averageSalary" ? parseFloat(value) || 0 : value,
+      [name]: Number(value),
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!formData.idRole) {
+      alert("Por favor, selecione um cargo.");
+      return;
+    }
+
+    const selectedRole = availableRoles.find(r => r.idRole === formData.idRole);
     try {
       const payload: BenchmarkTO = {
         role: {
-          name: formData.roleName,
-          level: formData.level,
+          idRole: formData.idRole,
+          name: selectedRole ? selectedRole.name : "",
+          level: selectedRole ? selectedRole.level as Level : "JUNIOR",
         },
         averageSalary: formData.averageSalary,
         floorSalary: formData.averageSalary * 0.8,
@@ -47,8 +73,7 @@ export default function BenchmarkForm({ onSuccess }: BenchmarkFormProps) {
       alert("Benchmark de mercado criado com sucesso!");
 
       setFormData({
-        roleName: "",
-        level: "JUNIOR",
+        idRole: 0,
         averageSalary: 0,
       });
 
@@ -68,46 +93,35 @@ export default function BenchmarkForm({ onSuccess }: BenchmarkFormProps) {
       </h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Seleção de Cargo */}
-          <div>
+          {/* INPUT UNIFICADO: Cargo + Nível */}
+          <div className="col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Cargo (Role)
+              Cargo & Nível
             </label>
             <select
-              name="roleName"
-              value={formData.roleName}
+              name="idRole"
+              value={formData.idRole}
               onChange={handleChange}
               className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none bg-white"
               required
+              disabled={isLoadingRoles}
             >
-              <option value="" disabled>
-                Selecione um cargo...
+              <option value={0} disabled>
+                {isLoadingRoles ? "Carregando cargos..." : "Selecione o Cargo..."}
               </option>
-              {COMMON_ROLES.map((role) => (
-                <option key={role} value={role}>
-                  {role}
+              
+              {availableRoles.map((role) => (
+                <option key={role.idRole} value={role.idRole}>
+                  {/* Exibe Cargo + Nível juntos */}
+                  {role.name} - {role.level}
                 </option>
               ))}
             </select>
-          </div>
-
-          {/* Seleção de Nível */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Nível (Senioridade)
-            </label>
-            <select
-              name="level"
-              value={formData.level}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none bg-white"
-            >
-              {LEVELS.map((lvl) => (
-                <option key={lvl} value={lvl}>
-                  {lvl}
-                </option>
-              ))}
-            </select>
+            {availableRoles.length === 0 && !isLoadingRoles && (
+              <p className="text-xs text-red-500 mt-1">
+                Nenhum cargo encontrado. Cadastre cargos na aba "Cargos" primeiro.
+              </p>
+            )}
           </div>
 
           {/* Média Salarial */}

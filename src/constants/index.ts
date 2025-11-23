@@ -3,12 +3,7 @@ import { Level } from "../types";
 export const LEVELS: Level[] = [
   "JUNIOR", 
   "PLENO", 
-  "SENIOR", 
-  "SPECIALIST", 
-  "MANAGER", 
-  "DIRECTOR", 
-  "VP", 
-  "C_LEVEL"
+  "SENIOR"
 ];
 
 export const COMMON_ROLES = [
