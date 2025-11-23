@@ -131,7 +131,7 @@ export const SalaryAnalysisService = {
 
     // Recalcula sugestão de aumento baseada na regra de negócio original
     let suggestedRaise = 0;
-    if (to.risk === "CRITICAL" || (compaRatio < 0.9 && to.risk === "HIGH")) {
+    if (to.risk === "BELOW_FLOOR" || (compaRatio < 0.9 && to.risk === "ON_TARGET")) {
       suggestedRaise = Math.max(0, marketAvg - to.recordedSalary);
     }
 
@@ -139,7 +139,7 @@ export const SalaryAnalysisService = {
       ...to,
       differencePercentage: diffPct,
       recommendation:
-        to.risk === "CRITICAL" ? "Ação Imediata Requerida" : "Monitorar",
+        to.risk === "BELOW_FLOOR" ? "Ação Imediata Requerida" : "Monitorar",
       compaRatio: compaRatio,
       percentile: compaRatio > 1.05 ? "Acima da Média" : "Abaixo da Média",
       replacementCost: to.recordedSalary * 4.5, // Estimativa

@@ -4,7 +4,7 @@ export type Level =
   | "SENIOR"
 ;
 
-export type RiskClassification = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+export type RiskClassification = "ABOVE_CEILING" | "ON_TARGET" | "BELOW_FLOOR";
 
 export interface RoleTO {
   idRole?: number;

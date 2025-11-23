@@ -52,7 +52,7 @@ const handleAddClick = () => setIsModalOpen(true);
     0
   );
   const riscosCriticos = analyses.filter(
-    (a) => a.risk === "CRITICAL" || a.risk === "HIGH"
+    (a) => a.risk === "BELOW_FLOOR"
   ).length;
 
   if (loading) {
@@ -157,14 +157,19 @@ const handleAddClick = () => setIsModalOpen(true);
                     <span
                       className={`px-2 py-1 text-xs font-bold rounded-full 
                       ${
-                        item.risk === "CRITICAL"
+                        item.risk === "BELOW_FLOOR"
                           ? "bg-red-100 text-red-800"
-                          : item.risk === "HIGH"
+                          : item.risk === "ON_TARGET"
                           ? "bg-orange-100 text-orange-800"
                           : "bg-green-100 text-green-800"
                       }`}
+
                     >
-                      {item.risk}
+                      {item.risk === "BELOW_FLOOR"
+                        ? "Abaixo do Piso"
+                        : item.risk === "ON_TARGET"
+                        ? "Dentro do Alvo"
+                        : "Acima do Teto"}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -184,9 +189,7 @@ const handleAddClick = () => setIsModalOpen(true);
               isOpen={isModalOpen}
               onClose={() => setIsModalOpen(false)}
               onSave={async (payload) => {
-                // adapt modal payload to the service call; use a cast to bypass stricter typings if needed
                 await SalaryAnalysisService.create(payload as unknown as any);
-                // reload the history and close the modal after successful save
                 await loadHistory();
                 setIsModalOpen(false);
               }}

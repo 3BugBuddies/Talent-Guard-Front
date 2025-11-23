@@ -41,14 +41,17 @@ export default function CreateAnalysisModal({ isOpen, onClose, onSave }: CreateA
 
   const loadData = async () => {
     try {
-      const [empData, benchData] = await Promise.all([
-        EmployeeService.getAll(),
-        BenchmarkService.getAll()
-      ]);
+   // 1. Busca Colaboradores primeiro e espera terminar
+      console.log("Iniciando busca de colaboradores...");
+      const empData = await EmployeeService.getAll();
       setEmployees(empData);
+
+      // 2. Só depois busca os Benchmarks
+      console.log("Iniciando busca de benchmarks...");
+      const benchData = await BenchmarkService.getAll();
       setBenchmarks(benchData);
     } catch (error) {
-      console.error("Erro ao carregar dados", error);
+      console.error("Erro na sincronia das requisições:", error);
     }
   };
 
