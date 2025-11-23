@@ -38,8 +38,8 @@ function App() {
       />
 
       <Route element={<Layout />}>
-        {/* <Route path="/integrantes" element={<Team />} />
-        <Route path="/contato" element={<Contact />} /> */}
+        <Route path="/integrantes" element={<Team />} />
+        <Route path="/contato" element={<Contact />} />
       </Route>
     </Routes>
   );
