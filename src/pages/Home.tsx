@@ -6,72 +6,86 @@ import ThemeToggle from "../components/ui/ThemeToggle";
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-dark-bg transition-colors duration-300">
+    // Wrapper principal: min-h-screen garante altura total, overflow-x-hidden previne rolagem horizontal indesejada
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-dark-bg transition-colors duration-300 overflow-x-hidden font-outfit">
 
       {/* Background Decorativo (Gradient Blur) */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-[30%] -left-[10%] w-[70%] h-[70%] rounded-full bg-blue-400/20 dark:bg-blue-900/10 blur-[100px]" />
         <div className="absolute top-[20%] -right-[10%] w-[50%] h-[50%] rounded-full bg-purple-400/20 dark:bg-purple-900/10 blur-[100px]" />
       </div>
-      <div className="flex flex-row align-end ml-20" >
+
+      {/* Barra de Topo com Toggle (Alinhado à direita com padding adequado) */}
+      <div className="w-full p-4 sm:p-2 flex justify-end relative z-20">
         <ThemeToggle />
       </div>
 
-      <main className="flex-grow flex items-center">
-
+      {/* Conteúdo Principal */}
+        <main className="flex-grow flex flex-col justify-center relative z-10 md:mb-40">
         <HomeContainer>
 
-          <div className="flex flex-col lg:flex-row items-center gap-1 py-2 lg:py-2">
+          {/* Seção Hero: Coluna no Mobile, Linha no Desktop (lg) */}
+          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20 py-8 lg:py-20 px-4 sm:px-6">
 
             {/* Texto (Lado Esquerdo) */}
-            <div className="w-full lg:w-1/2 text-center ml-20 lg:text-left animate-slideUp">
+            <div className="w-full lg:w-1/2 text-center lg:text-left animate-slideUp">
+              
+              {/* Badge */}
               <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 text-xs font-bold uppercase tracking-wide mb-6">
                 Global Solution 2025
               </div>
 
-              <h1 className="font-outfit text-4xl sm:text-5xl lg:text-7xl font-bold leading-tight text-gray-900 dark:text-white mb-6">
-                O Futuro do <br />
+              {/* Título Responsivo */}
+              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold leading-tight text-gray-900 dark:text-white mb-6">
+                O Futuro do <br className="hidden sm:block" />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
                   Trabalho é Agora
                 </span>
               </h1>
 
+              {/* Descrição */}
               <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
                 Visão preditiva. Retenção estratégica. Equidade para todos.
                 Prepare sua organização para 2030 com inteligência de dados e humanidade.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <Link to="/login">
-                  <button className="w-full sm:w-auto px-8 py-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg shadow-lg hover:shadow-blue-500/30 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2">
+              {/* Botões de Ação */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start w-full">
+                <Link to="/login" className="w-full sm:w-auto">
+                  <button className="w-full px-8 py-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg shadow-lg hover:shadow-blue-500/30 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2">
                     Acessar Plataforma <ArrowRight size={20} />
                   </button>
                 </Link>
-                <a href="#features">
-                  <button className="w-full sm:w-auto px-8 py-4 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 font-bold text-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all">
-                    Saiba Mais
+                <Link to="/integrantes" className="w-full sm:w-auto">
+                  <button className="w-full px-8 py-4 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 font-bold text-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all">
+                    Conheça o Time
                   </button>
-                </a>
+                </Link>
               </div>
             </div>
 
             {/* Imagem Hero (Lado Direito) */}
-            <div className="w-full lg:w-1/2 animate-fadeIn delay-200">
+            <div className="w-full lg:w-1/2 mt-12 lg:mt-0 animate-fadeIn delay-200">
               <div className="relative w-full max-w-lg mx-auto group">
+                
                 {/* Efeito de Glow atrás da imagem */}
-                <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-[20px] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+                <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-[24px] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
 
-                <img
-                  src="/img/logo-transp-1.png" 
-                  alt="Talent Guard Dashboard"
-                  className="relative rounded-[10px] shadow-2xl w-full h-auto object-cover bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800"
-                />
+                {/* Container da Imagem com Padding (Moldura) */}
+                <div className="relative bg-white dark:bg-gray-900 rounded-[24px] shadow-2xl border border-gray-100 dark:border-gray-800 p-2 sm:p-3">
+                   <img
+                    src="/img/logo-transp-1.png"
+                    alt="Talent Guard Dashboard"
+                    className="w-full h-auto object-cover rounded-[18px]"
+                  />
+                </div>
               </div>
             </div>
+
           </div>
 
           {/* Seção de Features (Pilares) */}
-          <div id="features" className="mx-10 py-6 grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-gray-200 dark:border-gray-800">
+          <div id="features" className="py-16 px-4 sm:px-6 grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-gray-200 dark:border-gray-800 mt-8">
             <FeatureCard
               icon={<BarChart3 size={32} className="text-blue-500" />}
               title="Visão Preditiva"
@@ -97,10 +111,11 @@ export default function Home() {
   );
 }
 
+// Componente auxiliar para os cards de destaque
 function FeatureCard({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) {
   return (
     <div className="p-6 rounded-2xl bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border shadow-sm hover:shadow-md transition-shadow">
-      <div className="mb-4 bg-gray-50 dark:bg-gray-800 w-8 h-8 rounded-lg flex items-center justify-center">
+      <div className="mb-4 bg-gray-50 dark:bg-gray-800 w-12 h-12 rounded-lg flex items-center justify-center">
         {icon}
       </div>
       <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{title}</h3>
