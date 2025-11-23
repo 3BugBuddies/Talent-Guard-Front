@@ -1,6 +1,6 @@
-# Talent Guard - Global Solution 2025/2 🚀
+# Talent Guard - Global Solution 2025 🚀
 
-![Talent Guard Logo](https://via.placeholder.com/800x200?text=Talent+Guard+Banner)
+<img width="1536" height="1024" alt="logo-transp-1" src="https://github.com/user-attachments/assets/cfefcd38-18f5-4326-a5fa-ae308b9e39e4" />
 
 
 > **"TalentGuard AI: Visão preditiva. Retenção estratégica. Equidade para todos."**
@@ -191,6 +191,8 @@ Esta aplicação consome uma API RESTful hospedada em *"https://talent-guard-api
   * **Repositório GitHub:** [ACESSAR REPOSITÓRIO](https://github.com/3BugBuddies/Talent-Guard-Front)
   * **Deploy (Vercel):** [ACESSAR PROJETO ONLINE](https://talent-guard-front.vercel.app/)
   * **Vídeo Pitch (YouTube):** [ASSISTIR VÍDEO](https://www.google.com/search?q=https://youtu.be/SEU_VIDEO)
+
+<img width="306" height="307" alt="qr-code" src="https://github.com/user-attachments/assets/b5bbf8ef-fd6d-415b-aa71-6297a7aaa167" />
 
 -----
 
