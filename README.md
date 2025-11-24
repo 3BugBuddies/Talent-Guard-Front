@@ -29,7 +29,7 @@ A solução consiste em uma plataforma de RH impulsionada por IA para analisar a
 
 ## 🚦 Status do Projeto
 
-✅ **Concluído (Versão 1.0)**
+✅ **Concluído (Versão 1.2.2)**
 
 ---
 
@@ -202,8 +202,6 @@ Esta aplicação consome uma API RESTful hospedada em *https://talent-guard-api-
   * **Repositório GitHub:** [ACESSAR REPOSITÓRIO](https://github.com/3BugBuddies/Talent-Guard-Front)
   * **Deploy (Vercel):** [ACESSAR PROJETO ONLINE](https://talent-guard-front.vercel.app/)
   * **Vídeo Pitch (YouTube):** [ASSISTIR VÍDEO](https://www.youtube.com/watch?v=o7RpVR1mM7E)
-
-<img width="306" height="307" alt="qr-code" src="https://github.com/user-attachments/assets/b5bbf8ef-fd6d-415b-aa71-6297a7aaa167" />
 
 -----
 
