@@ -143,24 +143,19 @@ A aplicação é uma SPA (Single Page Application). Abaixo estão as principais 
 ### Rotas do Front-End (React Router)
 
   * `/login` - **Login**: Tela de acesso ao sistema.
-  * `/rh-dashboard` - **Home**: Visão geral dos KPIs e gráficos.
-  * `/admin` - **Listagem**: Tabela de funcionários (CRUD).
+  * `/rh-dashboard` - **Lastagem**: Colaboradores e Analise Salarial Visão geral dos KPIs e gráficos.
+  * `/admin` - **Listagem**: Cargos e Benchmark.
   * `/integrantes` - **Sobre Nós**: Página obrigatória com dados do grupo.
 
 ### Integração com API (Backend Java)
 
-Esta aplicação consome uma API RESTful hospedada em *"https://talent-guard-api.onrender.com"*.
-
-  * `GET /api/employees` - Lista todos os colaboradores.
-  * `POST /api/employees` - Cria um novo colaborador.
-  * `GET /api/dashboard/metrics` - Retorna dados para os gráficos.
-
+Esta aplicação consome uma API RESTful hospedada em *https://talent-guard-api-production.up.railway.app/*.
 
 -----
 
 ## 👥 Autores e Créditos
 
-**Turma: 1TDS - Fevereiro**
+**Turma: 1TDSR **
 
 *   **Mariana Inoue** RM - 565834
 *   **Giovanna Neri** RM - 566154
@@ -172,17 +167,33 @@ Esta aplicação consome uma API RESTful hospedada em *"https://talent-guard-api
 
 ## 📸 Screenshots e Demonstração
 
-### 1\. Dashboard (Dark Mode)
+### 1\.HOME
+<img width="1898" height="1020" alt="Captura de tela 2025-11-23 202439" src="https://github.com/user-attachments/assets/c46deb53-be7d-4065-825b-b5bd4ec4dd92" />
 
-*Visão geral com gráficos e KPIs estratégicos.*
 
 ### 2\. Gestão de Colaboradores
+![WhatsApp Image 2025-11-23 at 20 52 52](https://github.com/user-attachments/assets/635ae0d6-c77a-4eae-b2b9-d91371de05cd)
 
 *Listagem responsiva com ações de editar e excluir.*
 
-### 3\. Página de Integrantes
+### 3\. Analise Salarial
+![WhatsApp Image 2025-11-23 at 20 51 54](https://github.com/user-attachments/assets/4025b643-ff8c-4eaa-9da8-397888729688)
+*Visão geral com gráficos e KPIs estratégicos.*
+
+### 4\. Gestão Cargos
+<img width="1910" height="1069" alt="Captura de tela 2025-11-23 202537" src="https://github.com/user-attachments/assets/42e994cb-6fd1-429a-952f-594b43bbe9f1" />
+
+### 5\. Area benchmark
+<img width="1896" height="927" alt="Captura de tela 2025-11-23 220330" src="https://github.com/user-attachments/assets/330e063f-2770-4a2a-98a6-19e07be9facf" />
+
+### 5\. Dark mode - Admin Geral
+<img width="1917" height="944" alt="Captura de tela 2025-11-23 220054" src="https://github.com/user-attachments/assets/43444a36-9dee-4b30-8581-0c1b6790e850" />
+
+### 6\. Página de Integrantes - Faq - Contato
+<img width="1905" height="943" alt="Captura de tela 2025-11-23 220130" src="https://github.com/user-attachments/assets/b77c9526-89df-4cf2-aec6-0c7f35759da5" />
 
 *Página obrigatória com os dados da equipe.*
+<img width="1883" height="926" alt="Captura de tela 2025-11-23 220156" src="https://github.com/user-attachments/assets/9c32b7b8-f9cd-4d54-93b8-5b9487690c74" />
 
 -----
 
@@ -190,7 +201,7 @@ Esta aplicação consome uma API RESTful hospedada em *"https://talent-guard-api
 
   * **Repositório GitHub:** [ACESSAR REPOSITÓRIO](https://github.com/3BugBuddies/Talent-Guard-Front)
   * **Deploy (Vercel):** [ACESSAR PROJETO ONLINE](https://talent-guard-front.vercel.app/)
-  * **Vídeo Pitch (YouTube):** [ASSISTIR VÍDEO](https://www.youtube.com/watch?v=3w24bcb5sm4)
+  * **Vídeo Pitch (YouTube):** [ASSISTIR VÍDEO](https://www.youtube.com/watch?v=o7RpVR1mM7E)
 
 <img width="306" height="307" alt="qr-code" src="https://github.com/user-attachments/assets/b5bbf8ef-fd6d-415b-aa71-6297a7aaa167" />
 
