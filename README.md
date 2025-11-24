@@ -190,7 +190,7 @@ Esta aplicação consome uma API RESTful hospedada em *"https://talent-guard-api
 
   * **Repositório GitHub:** [ACESSAR REPOSITÓRIO](https://github.com/3BugBuddies/Talent-Guard-Front)
   * **Deploy (Vercel):** [ACESSAR PROJETO ONLINE](https://talent-guard-front.vercel.app/)
-  * **Vídeo Pitch (YouTube):** [ASSISTIR VÍDEO](https://www.google.com/search?q=https://youtu.be/SEU_VIDEO)
+  * **Vídeo Pitch (YouTube):** [ASSISTIR VÍDEO](https://www.youtube.com/watch?v=3w24bcb5sm4)
 
 <img width="306" height="307" alt="qr-code" src="https://github.com/user-attachments/assets/b5bbf8ef-fd6d-415b-aa71-6297a7aaa167" />
 
